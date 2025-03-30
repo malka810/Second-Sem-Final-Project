@@ -1,0 +1,197 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--   <meta charset="UTF-8">-->
+<!--   <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<!--   <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--   <title>register</title>-->
+
+<!--   &lt;!&ndash; font awesome cdn link  &ndash;&gt;-->
+<!--   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">-->
+
+<!--   &lt;!&ndash; custom css file link  &ndash;&gt;-->
+<!--   <link rel="stylesheet" href="css/style.css">-->
+
+<!--</head>-->
+<!--<body>-->
+
+<!--<header class="header">-->
+<!--   -->
+<!--   <section class="flex">-->
+
+<!--      <a href="studentHome.html" class="logo"><img src="images/logo.png" class="image" alt=""><b id="logoN" style="color: #9b2ed5">EduNexus</b></a>-->
+
+
+<!--      <form action="search.html" method="post" class="search-form">-->
+<!--         <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">-->
+<!--         <button type="submit" class="fas fa-search"></button>-->
+<!--      </form>-->
+
+<!--      <div class="icons">-->
+<!--         <div id="menu-btn" class="fas fa-bars"></div>-->
+<!--         <div id="search-btn" class="fas fa-search"></div>-->
+<!--         <div id="user-btn" class="fas fa-user"></div>-->
+<!--         <div id="toggle-btn" class="fas fa-sun"></div>-->
+<!--      </div>-->
+
+<!--      <div class="profile">-->
+<!--         <img src="images/User.png" class="image" alt="">-->
+<!--         <p class="role">student</p>-->
+<!--         <a href="profile.html" class="btn">view profile</a>-->
+<!--         <div class="flex-btn">-->
+<!--            <a href="login.html" class="option-btn">login</a>-->
+<!--            <a href="register.html" class="option-btn">register</a>-->
+<!--         </div>-->
+<!--      </div>-->
+
+<!--   </section>-->
+
+<!--</header>   -->
+
+<!--<div class="side-bar">-->
+
+<!--   <div id="close-btn">-->
+<!--      <i class="fas fa-times"></i>-->
+<!--   </div>-->
+
+<!--   <div class="profile">-->
+<!--      <img src="images/User.png" class="image" alt="">-->
+<!--      <p class="role">User</p>-->
+<!--      <a href="profile.html" class="btn">view profile</a>-->
+<!--   </div>-->
+
+<!--   <nav class="navbar">-->
+<!--      <a href="studentHome.html"><i class="fas fa-home"></i><span>Home</span></a>-->
+<!--      <a href="about.html"><i class="fas fa-question"></i><span>About</span></a>-->
+<!--      <a href="courses.html"><i class="fas fa-graduation-cap"></i><span>Courses</span></a>-->
+<!--      <a href="teachers.html"><i class="fas fa-chalkboard-user"></i><span>Instructors</span></a>-->
+<!--      <a href="contact.html"><i class="fas fa-headset"></i><span>Contact us</span></a>-->
+<!--   </nav>-->
+
+<!--</div>-->
+
+<!--<section class="form-container">-->
+
+<!--   <form action="" method="post" enctype="multipart/form-data" id="registerForm">-->
+<!--      <h3>Register Now</h3>-->
+
+<!--      <p>Your Name <span>*</span></p>-->
+<!--      <input type="text" name="name" placeholder="Enter your name" id="name" required maxlength="50" class="box">-->
+
+<!--      <p>Your Email <span>*</span></p>-->
+<!--      <input type="email" name="email" placeholder="Enter your email" id="email" required maxlength="50" class="box">-->
+
+<!--      <p>Your Password <span>*</span></p>-->
+<!--      <input type="password" name="pass" placeholder="Enter your password" id="password" required maxlength="20" class="box">-->
+
+<!--      <p>Confirm Password <span>*</span></p>-->
+<!--      <input type="password" name="c_pass" placeholder="Confirm your password" id="password2" required maxlength="20" class="box">-->
+
+<!--      <p>Contact Number <span>*</span></p>-->
+<!--      <input type="tel" name="contact" placeholder="Enter your contact number" id="contact" required maxlength="15" class="box">-->
+
+<!--      <p>Select Profile Image <span>*</span></p>-->
+<!--      <input type="file" id="profileImageInput" accept="image/*" required class="box" onchange="previewImage(event)">-->
+
+<!--      &lt;!&ndash; Profile Image Preview &ndash;&gt;-->
+<!--      <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">-->
+<!--         <img id="imagePreview" src="" alt="Profile Image" style="max-width: 100px; border-radius: 50%;">-->
+<!--      </div>-->
+
+<!--      <input type="submit" value="Register Now" name="submit" class="btn">-->
+<!--   </form>-->
+
+<!--</section>-->
+
+
+<!--<footer class="footer">-->
+
+<!--   &copy; copyright @ 2022 by <span>web designer</span> | all rights reserved!-->
+
+<!--</footer>-->
+
+<!--&lt;!&ndash; custom js file link  &ndash;&gt;-->
+<!--<script src="js/script.js"></script>-->
+<!--<script src="js/jquery.js"></script>-->
+<!--<script>-->
+<!--   $(document).ready(function () {-->
+<!--      $("#registerForm").submit(function (event) {-->
+<!--         event.preventDefault();-->
+
+<!--         var password = $("#password").val();-->
+<!--         var confirmPassword = $("#password2").val();-->
+<!--         if (password !== confirmPassword) {-->
+<!--            alert("Passwords do not match!");-->
+<!--            return;-->
+<!--         }-->
+
+<!--         var userData = {-->
+<!--            userName: $("#name").val(),-->
+<!--            email: $("#email").val(),-->
+<!--            password: password,-->
+<!--            contactNumber: $("#contact").val(),-->
+<!--            role: $("#role").val()-->
+<!--         };-->
+
+<!--         var formData = new FormData();-->
+<!--         formData.append("user", new Blob([JSON.stringify(userData)], { type: "application/json" }));-->
+<!--         formData.append("profileImage", $("#profileImageInput")[0].files[0]);-->
+
+<!--         $.ajax({-->
+<!--            type: "POST",-->
+<!--            url: "http://localhost:8080/api/v1/user/register",-->
+<!--            data: formData,-->
+<!--            processData: false,-->
+<!--            contentType: false,-->
+<!--            success: function (data) {-->
+<!--               alert("Registration Successful!");-->
+
+<!--               if (data.token) {-->
+<!--                  localStorage.setItem("authToken", data.token);-->
+<!--               }-->
+
+<!--               let redirectUrl = userData.role === "ADMIN" ? "admin-dashboard.html" : "user-dashboard.html";-->
+<!--               window.location.href = redirectUrl;-->
+<!--            },-->
+<!--            error: function (xhr) {-->
+<!--               alert("Registration failed: " + xhr.responseText);-->
+<!--            }-->
+<!--         });-->
+<!--      });-->
+<!--   });-->
+
+<!--   function previewImage(event) {-->
+<!--      const previewContainer = document.getElementById('imagePreviewContainer');-->
+<!--      const previewImage = document.getElementById('imagePreview');-->
+
+<!--      const file = event.target.files[0];-->
+<!--      if (file) {-->
+<!--         const reader = new FileReader();-->
+<!--         reader.onload = function () {-->
+<!--            previewImage.src = reader.result;-->
+<!--            previewContainer.style.display = 'block';-->
+<!--         }-->
+<!--         reader.readAsDataURL(file);-->
+<!--      }-->
+<!--   }-->
+<!--</script>-->
+
+<!--<script>-->
+<!--   function previewImage(event) {-->
+<!--      const previewContainer = document.getElementById('imagePreviewContainer');-->
+<!--      const previewImage = document.getElementById('imagePreview');-->
+
+<!--      const file = event.target.files[0];-->
+<!--      if (file) {-->
+<!--         const reader = new FileReader();-->
+<!--         reader.onload = function() {-->
+<!--            previewImage.src = reader.result;-->
+<!--            previewContainer.style.display = 'block';-->
+<!--         }-->
+<!--         reader.readAsDataURL(file);-->
+<!--      }-->
+
+<!--   }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

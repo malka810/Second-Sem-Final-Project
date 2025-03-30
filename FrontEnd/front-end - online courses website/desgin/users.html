@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+  <style>
+
+    .main-content {
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+
+    /* Form Styles */
+    .form-label {
+      font-size: larger;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .form-control, .form-select {
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: 1px solid #ced4da;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-control:focus, .form-select:focus {
+      box-shadow: 0 0 0 0.25rem rgba(155, 46, 213, 0.25);
+    }
+
+    /* Button Styles */
+    .btn {
+      padding: 5px 20px;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+    }
+
+    .btn i {
+      margin-right: 8px;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .btn-warning {
+      background-color: #ffc107;
+      border-color: #ffc107;
+      color: #212529;
+    }
+
+    .btn-success {
+      background-color: #772df6;
+      border-color: #28a745;
+    }
+
+    /* Table Styles */
+    .table {
+      margin-bottom: 0;
+    }
+
+    .table th {
+      font-weight: 600;
+      background-color: #f8f9fa;
+    }
+
+    .table td {
+      vertical-align: middle;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    .badge {
+      font-weight: 500;
+      padding: 6px 10px;
+      font-size: 14px;
+    }
+
+    .action-buttons .btn {
+      padding: 5px 10px;
+      font-size: 14px;
+      margin: 0 3px;
+    }
+    .card-header {
+      color: #848488;
+      padding: 15px 20px;
+      font-weight: 600;
+      font-size: 22px;
+      border-bottom: none;
+    }
+    .side-bar {
+      text-decoration-line: none;
+      /*width: 280px;*/
+      /*height: 100vh;*/
+      position: fixed;
+      left: 5px;
+      top: 0;
+      background-color: white;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      padding-top: 50px;
+      z-index: 999;
+      transition: transform 0.3s ease;
+    }
+    #close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .side-bar .profile {
+      position: relative;
+      box-shadow: none;
+      padding: 0px;
+      display: block;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .side-bar .profile img {
+      width: 80px;
+      height: 80px;
+    }
+
+    .navbar {
+      padding: 20px;
+    }
+
+    .navbar a {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      margin: 5px 0;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s;
+    }
+
+    .navbar a i {
+      margin-right: 10px;
+      font-size: 18px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .navbar a:hover {
+      background-color: #eadefa;
+    }
+
+    .navbar a.active {
+      color: #f1c0fb;
+    }
+
+    .navbar a.active i {
+      color: #a45eef;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <section class="flex">
+    <a href="studentHome.html" class="logo">
+      <img src="images/logo.png" class="image" alt="">
+      <b id="logoN" style="color: #9b2ed5">EduNexus</b>
+    </a>
+
+    <form action="search.html" method="post" class="search-form">
+      <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
+      <button type="submit" class="fas fa-search"></button>
+    </form>
+
+    <div class="icons">
+      <div id="menu-btn" class="fas fa-bars icon"></div>
+      <div id="user-btn" class="fas fa-user icon"></div>
+      <div id="toggle-btn" class="fas fa-sun icon"></div>
+    </div>
+
+    <div class="profile">
+      <img src="images/User.png" width="80" height="80" class="image" alt="">
+      <p class="role">User</p>
+      <a href="profile.html" class="btn">view profile</a>
+    </div>
+  </section>
+</header>
+
+<div class="side-bar">
+  <div id="close-btn">
+    <i class="fas fa-times"></i>
+  </div>
+
+  <div class="profile">
+    <img src="images/User.png" class="image" alt="">
+    <p class="role">User</p>
+    <a href="profile.html" class="btn">view profile</a>
+  </div>
+
+  <nav class="navbar">
+    <a href="studentHome.html"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="about.html"><i class="fas fa-question"></i><span>About</span></a>
+    <a href="courses.html"><i class="fas fa-graduation-cap"></i><span>Courses</span></a>
+    <a href="users.html" class="active"><i class="fas fa-chalkboard-user"></i><span>Users</span></a>
+    <a href="contact.html"><i class="fas fa-headset"></i><span>Contact us</span></a>
+  </nav>
+</div>
+
+<div class="main-content">
+<!--  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">-->
+<!--    <div class="btn-toolbar mb-2 mb-md-0">-->
+<!--      <div class="input-group">-->
+<!--        <input type="text" class="form-control" placeholder="Search users..." aria-label="Search">-->
+<!--        <button class="btn btn-outline-secondary" type="button">-->
+<!--          <i class="fas fa-search"></i>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <!-- User Form -->
+  <div class="card">
+    <div class="card-header"></i>User Information
+    </div>
+    <div class="card-body">
+      <form id="registerForm">
+        <!-- Full Name Field -->
+        <div class="mb-3">
+          <label for="registerName" class="form-label">Full Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="registerName" placeholder="Enter your full name" required>
+          <div class="invalid-feedback">Please enter your full name.</div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="mb-3">
+          <label for="registerEmail" class="form-label">Email Address <span class="text-danger">*</span></label>
+          <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email" required>
+          <div class="invalid-feedback">Please enter a valid email address.</div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-3">
+          <label for="registerPassword" class="form-label">Password <span class="text-danger">*</span></label>
+          <input type="password" class="form-control" id="registerPassword" placeholder="Enter your password" required>
+          <div class="invalid-feedback">Please enter a password.</div>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="mb-3">
+          <label for="registerConfirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+          <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirm your password" required>
+          <div class="invalid-feedback">Passwords do not match.</div>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="mb-3">
+          <label for="registerRole" class="form-label">Role <span class="text-danger">*</span></label>
+          <select class="form-control" id="registerRole" required>
+            <option value="" disabled selected>Select Role</option>
+            <option value="ADMIN">Admin</option>
+            <option value="INSTRUCTOR">Instructor</option>
+            <option value="STUDENT">Student</option>
+          </select>
+          <div class="invalid-feedback">Please select a role.</div>
+        </div>
+
+        <!-- Profile Image Upload -->
+        <div class="mb-3">
+          <label for="profileImageInput" class="form-label">Profile Image <span class="text-danger">*</span></label>
+          <input type="file" class="form-control" id="profileImageInput" accept="image/*" required onchange="previewImage(event)">
+          <div class="invalid-feedback">Please upload a profile image.</div>
+        </div>
+
+        <!-- Profile Image Preview -->
+        <div id="imagePreviewContainer" class="text-center mb-3" style="display: none;">
+          <img id="imagePreview" src="" alt="Profile Image Preview" class="img-thumbnail" style="max-width: 100px; border-radius: 50%;">
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary" id="resetBtn">
+            <i class="fas fa-undo me-1"></i> Reset
+          </button>
+          <button type="button" class="btn btn-danger" id="deleteBtn" hidden="hidden">
+            <i class="fas fa-trash me-1"></i> Delete
+          </button>
+          <button type="button" class="btn btn-warning" id="updateBtn" hidden="hidden">
+            <i class="fas fa-pencil-alt me-1"></i> Update
+          </button>
+          <button type="submit" class="btn btn-success" id="saveBtn">
+            <i class="fas fa-save me-1"></i> Save
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card">
+    <div class="card-header">User List</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+          <tr>
+            <th>Profile</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody id="userTableBody">
+          <!-- Users will be added here dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!--<script src="js/script.js"></script>-->
+<script src="js/jquery.js"></script>
+<script>
+  $("#registerForm").submit(function (event) {
+    event.preventDefault();
+
+    var password = $("#registerPassword").val();
+    var confirmPassword = $("#registerConfirmPassword").val();
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    var userData = {
+      fullName: $("#registerName").val(),
+      email: $("#registerEmail").val(),
+      password: password,
+      role: $("#registerRole").val()
+    };
+
+    var formData = new FormData();
+    formData.append("user", new Blob([JSON.stringify(userData)], { type: "application/json" }));
+    formData.append("profileImage", $("#profileImageInput")[0].files[0]);
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:3030/api/v1/user/register",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        if (response.code === 201) { // Check if registration was successful
+          alert("Registration Successful!");
+
+          // Store the token if it exists
+          if (response.data && response.data.token) {
+            localStorage.setItem("authToken", response.data.token);
+          }
+        } else {
+          alert("Registration failed: " + (response.message || "Unknown error"));
+        }
+      },
+      error: function (xhr) {
+        alert("Registration failed: " + (xhr.responseJSON?.message || xhr.responseText || "Unknown error"));
+      }
+    });
+  });
+
+  function previewImage(event) {
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    const previewImage = document.getElementById('imagePreview');
+
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        previewImage.src = reader.result;
+        previewContainer.style.display = 'block';
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+
+  //getAll users
+  $(document).ready(function () {
+    function loadUsers() { // Define function first
+      $.ajax({
+        url: "http://localhost:3030/api/v1/user/all",
+        type: "GET",
+        dataType: "json",
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("authToken") // Send token
+        },
+        success: function (response) {
+          let tableBody = $("#userTableBody");
+          tableBody.empty();
+
+          response.data.forEach(user => {
+            let row = `<tr>
+                                <td><img src='${user.profileImage}' class='img-thumbnail' style='width:50px; border-radius:50%;'></td>
+                                <td>${user.fullName}</td>
+                                <td>${user.email}</td>
+                                <td>${user.role}</td>
+                                <td>
+                                    <button class='btn btn-warning btn-sm editUser' data-id='${user.userId}'>Edit</button>
+                                    <button class='btn btn-danger btn-sm deleteUser' data-id='${user.userId}'>Delete</button>
+                                </td>
+                            </tr>`;
+            tableBody.append(row);
+          });
+
+          console.log("User data loaded successfully!");
+        },
+        error: function (xhr) {
+          console.error("Error loading user data: ", xhr);
+          alert("Error loading user data: " + (xhr.responseJSON?.message || xhr.responseText || "Unknown error"));
+        }
+      });
+    }
+
+    // Call function after it is defined
+    loadUsers();
+  });
+
+  // Delete User
+    $(document).on("click", ".deleteUser", function () {
+      var userId = $(this).data("id");
+      if (confirm("Are you sure you want to delete this user?")) {
+        $.ajax({
+          type: "DELETE",
+          url: `http://localhost:3030/api/v1/user/delete/${userId}`,
+          headers: { "Authorization": "Bearer " + localStorage.getItem("authToken") },
+          success: function () {
+            alert("User deleted successfully");
+            loadUsers();
+          },
+          error: function (xhr) {
+            console.error("Error deleting user:", xhr.responseText);
+            alert("Error deleting user");
+          }
+        });
+      }
+    });
+
+    // Edit User
+    $(document).on("click", ".editUser", function () {
+      var userId = $(this).data("id");
+      $.ajax({
+        type: "GET",
+        url: `http://localhost:3030/api/v1/user/${userId}`, //
+        headers: { "Authorization": "Bearer " + localStorage.getItem("authToken") },
+        success: function (user) {
+          $("#registerName").val(user.fullName);
+          $("#registerEmail").val(user.email).prop("disabled", true);
+          $("#registerPassword").val("");
+          $("#registerConfirmPassword").val("");
+          $("#updateBtn").attr("data-id", user.userId).show();
+          $("#saveBtn").hide();
+        },
+        error: function (xhr) {
+          console.error("Error fetching user data:", xhr.responseText);
+          alert("Error fetching user data");
+        }
+      });
+    });
+
+    // Update User
+    $("#updateBtn").click(function () {
+      var userId = $(this).attr("data-id");
+      var userData = {
+        fullName: $("#registerName").val()
+      };
+
+      $.ajax({
+        type: "PUT",
+        url: `http://localhost:3030/api/v1/user/update/${userId}`, // ✅ Fixed URL
+        headers: { "Authorization": "Bearer " + localStorage.getItem("authToken") },
+        contentType: "application/json",
+        data: JSON.stringify(userData),
+        success: function () {
+          alert("User updated successfully");
+          loadUsers();
+          resetForm(); // Reset form after update
+        },
+        error: function (xhr) {
+          console.error("Error updating user:", xhr.responseText);
+          alert("Error updating user");
+        }
+      });
+    });
+
+    // Reset Form Function
+    function resetForm() {
+      $("#registerForm")[0].reset();
+      $("#registerEmail").prop("disabled", false);
+      $("#updateBtn").hide();
+      $("#saveBtn").show();
+    }
+
+    // Reset Button Click Event
+    $("#resetBtn").click(function () {
+      resetForm();
+    });
+
+</script>
+</body>
+</html>
