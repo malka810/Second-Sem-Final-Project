@@ -47,4 +47,8 @@ public class ResponseDTO {
                 ", data=" + data +
                 '}';
     }
+
+    public ResponseDTO createResponse(int code, String s, Object o) {
+        return new ResponseDTO(code, s, o);
+    }
 }

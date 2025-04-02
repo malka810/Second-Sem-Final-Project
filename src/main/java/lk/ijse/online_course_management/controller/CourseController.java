@@ -31,6 +31,7 @@ public class CourseController {
                     .body(new ResponseDTO(VarList.RSP_ERROR, "Error: " + e.getMessage(), null));
         }
     }
+
     @GetMapping("/{courseId}")
     public ResponseEntity<ResponseDTO> getCourseById(@PathVariable UUID courseId) {
         try {
