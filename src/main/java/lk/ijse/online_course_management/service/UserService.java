@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public interface UserService {
@@ -14,11 +15,11 @@ public interface UserService {
 
     int updateUser(UserDTO userDTO);
 
-    int deleteUser(String userId);
+    int deleteUser(UUID userId);
 
     int resetPassword(String email, String newPassword);
 
-    UserDTO getUserById(String userId);
+    UserDTO getUserById(UUID userId);
 
     List<UserDTO> getUsersByRole(String role);
 }

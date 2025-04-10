@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Student Dashboard</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+   <link rel="stylesheet" href="../css/style.css">
+   <style>
+
+      /* Dashboard Styles */
+      .dashboard {
+         padding: 2rem;
+         max-width: 1200px;
+         margin: 0 auto;
+      }
+
+      .dashboard .heading {
+         text-align: center;
+         padding-bottom: 2rem;
+         font-size: 2.5rem;
+         color: var(--black);
+      }
+
+      .dashboard .box-container {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+         gap: 1.5rem;
+         align-items: flex-start;
+      }
+
+      .dashboard .box {
+         background-color: var(--white);
+         border-radius: 0.5rem;
+         padding: 2rem;
+         box-shadow: var(--box-shadow);
+      }
+
+      .dashboard .box h3 {
+         font-size: 1.8rem;
+         color: var(--black);
+         margin-bottom: 1rem;
+      }
+
+      .dashboard .box p {
+         font-size: 1.6rem;
+         color: var(--light-color);
+         line-height: 1.8;
+         padding: 0.5rem 0;
+      }
+
+      .dashboard .progress-container {
+         margin: 1.5rem 0;
+      }
+
+      .dashboard .progress-bar {
+         height: 1rem;
+         border-radius: 0.5rem;
+         background-color: var(--light-bg);
+         margin-bottom: 0.5rem;
+         overflow: hidden;
+      }
+
+      .dashboard .progress-bar div {
+         height: 100%;
+
+   </style>
+</head>
+<body>
+
+<header class="header">
+   <section class="flex">
+      <a href="studentHome.html" class="logo"><img src="../images/logo.png" class="image" alt=""><b id="logoN" style="color: #9b2ed5">EduNexus</b></a>
+      <form action="../search.html" method="post" class="search-form">
+         <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
+         <button type="submit" class="fas fa-search"></button>
+      </form>
+      <div class="icons">
+         <div id="menu-btn" class="fas fa-bars"></div>
+         <div id="search-btn" class="fas fa-search"></div>
+         <div id="user-btn" class="fas fa-user"></div>
+         <div id="toggle-btn" class="fas fa-sun"></div>
+      </div>
+      <div class="profile">
+         <img src="../images/User.png" width="80" height="80" class="image" alt="">
+         <p class="role">Student</p>
+         <a href="../profile.html" class="btn">view profile</a>
+         <div class="flex-btn">
+            <a href="../logout.html" class="option-btn">logout</a>
+         </div>
+      </div>
+   </section>
+</header>
+
+<div class="side-bar">
+   <div id="close-btn">
+      <i class="fas fa-times"></i>
+   </div>
+   <div class="profile">
+      <img src="../images/User.png" class="image" alt="">
+      <p class="role">Student</p>
+      <a href="../profile.html" class="btn">view profile</a>
+   </div>
+   <nav class="navbar">
+      <a href="studentHome.html" class="active"><i class="fas fa-home"></i><span>Dashboard</span></a>
+      <a href="../Student/courses.html"><i class="fas fa-book-open"></i><span>My Courses</span></a>
+      <a href="studyMaterials.html"><i class="fas fa-file-video"></i><span>Study Materials</span></a>
+      <a href="assignments.html"><i class="fas fa-tasks"></i><span>Assignments</span></a>
+      <a href="quizzes.html"><i class="fas fa-question-circle"></i><span>Quizzes</span></a>
+      <a href="grades.html"><i class="fas fa-star"></i><span>Grades</span></a>
+      <a href="../about.html"><i class="fas fa-question"></i><span>About</span></a>
+      <a href="../contact.html"><i class="fas fa-headset"></i><span>Contact</span></a>
+   </nav>
+</div>
+
+<section class="dashboard">
+   <h1 class="heading">Student Dashboard</h1>
+   <div class="box-container">
+      <div class="box">
+         <h3>Welcome Back!</h3>
+         <p>Continue your learning journey with these quick actions</p>
+         <a href="myCourses.html" class="inline-btn">My Courses</a>
+      </div>
+
+      <div class="box">
+         <h3>Learning Progress</h3>
+         <div class="progress-container">
+            <div class="progress-bar" style="width: 65%"></div>
+            <span>65% Complete</span>
+         </div>
+         <p>Current Course: <span>Web Development Fundamentals</span></p>
+         <p>Last Lesson: <span>CSS Flexbox</span></p>
+         <a href="studyMaterials.html" class="inline-btn">Continue Learning</a>
+      </div>
+
+      <div class="box">
+         <h3>Pending Tasks</h3>
+         <div class="pending-tasks">
+            <p><i class="fas fa-tasks"></i> Assignment 3 due tomorrow</p>
+            <p><i class="fas fa-question-circle"></i> Quiz 2 available</p>
+            <p><i class="fas fa-envelope"></i> 2 unread messages</p>
+         </div>
+         <a href="assignments.html" class="inline-btn">View All Tasks</a>
+      </div>
+   </div>
+</section>
+
+<section class="courses">
+   <h1 class="heading">Available Courses</h1>
+   <div class="box-container">
+      <!-- Course 1 -->
+      <div class="box">
+         <div class="tutor">
+            <img src="../images/pic-2.jpg" alt="">
+            <div class="info">
+               <h3>John Deo</h3>
+               <span>Web Development</span>
+            </div>
+         </div>
+         <div class="thumb">
+            <img src="../images/thumb-1.png" alt="">
+            <span>12 videos</span>
+         </div>
+         <h3 class="title">Complete HTML Tutorial</h3>
+         <div class="course-meta">
+            <span><i class="fas fa-users"></i> 145 students</span>
+            <span><i class="fas fa-star"></i> 4.8 (120)</span>
+         </div>
+         <div class="flex-btn">
+            <a href="#" class="inline-btn enroll-btn" data-course-id="101">Enroll Now</a>
+            <a href="courseDetails.html" class="inline-btn">View Details</a>
+         </div>
+      </div>
+
+      <!-- Course 2 -->
+      <div class="box">
+         <div class="tutor">
+            <img src="../images/pic-3.jpg" alt="">
+            <div class="info">
+               <h3>Sarah Smith</h3>
+               <span>Programming</span>
+            </div>
+         </div>
+         <div class="thumb">
+            <img src="../images/thumb-2.png" alt="">
+            <span>15 videos</span>
+         </div>
+         <h3 class="title">JavaScript Fundamentals</h3>
+         <div class="course-meta">
+            <span><i class="fas fa-users"></i> 210 students</span>
+            <span><i class="fas fa-star"></i> 4.9 (185)</span>
+         </div>
+         <div class="flex-btn">
+            <a href="#" class="inline-btn enroll-btn" data-course-id="102">Enroll Now</a>
+            <a href="courseDetails.html" class="inline-btn">View Details</a>
+         </div>
+      </div>
+
+      <!-- More courses... -->
+   </div>
+   <div class="more-btn">
+      <a href="courses.html" class="inline-option-btn">View All Courses</a>
+   </div>
+</section>
+
+<!-- Study Materials Modal (appears after enrollment) -->
+<div class="modal" id="studyMaterialsModal">
+   <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Course Materials</h2>
+      <div class="video-list">
+         <div class="video-item">
+            <h3>Lesson 1: Introduction</h3>
+            <video controls>
+               <source src="../videos/lesson1.mp4" type="video/mp4">
+            </video>
+            <div class="video-actions">
+               <a href="assignment.html?lesson=1" class="inline-btn">Assignment</a>
+               <a href="quiz.html?lesson=1" class="inline-btn">Take Quiz</a>
+            </div>
+         </div>
+         <div class="video-item locked">
+            <h3>Lesson 2: Advanced Concepts <i class="fas fa-lock"></i></h3>
+            <p>Complete previous lesson to unlock</p>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- Assignment Submission Modal -->
+<div class="modal" id="assignmentModal">
+   <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Submit Assignment</h2>
+      <form id="assignmentForm">
+         <div class="inputBox">
+            <label>Assignment Title</label>
+            <input type="text" name="assignment_title" readonly value="Assignment 1: HTML Basics">
+         </div>
+         <div class="inputBox">
+            <label>Upload File</label>
+            <input type="file" name="assignment_file" required>
+         </div>
+         <div class="inputBox">
+            <label>Comments</label>
+            <textarea name="comments" placeholder="Any additional comments..."></textarea>
+         </div>
+         <button type="submit" class="inline-btn">Submit Assignment</button>
+      </form>
+   </div>
+</div>
+
+<!-- Quiz Interface Modal -->
+<div class="modal" id="quizModal">
+   <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="quiz-header">
+         <h2>Lesson 1 Quiz</h2>
+         <div class="quiz-timer">
+            <i class="fas fa-clock"></i> Time remaining: <span id="quizTime">15:00</span>
+         </div>
+      </div>
+
+      <form id="quizForm">
+         <!-- Question 1 -->
+         <div class="quiz-question">
+            <h3>1. What does HTML stand for?</h3>
+            <div class="options">
+               <label>
+                  <input type="radio" name="q1" value="a"> Hyper Text Markup Language
+               </label>
+               <label>
+                  <input type="radio" name="q1" value="b"> Hyperlinks and Text Markup Language
+               </label>
+               <label>
+                  <input type="radio" name="q1" value="c"> Home Tool Markup Language
+               </label>
+            </div>
+         </div>
+
+         <!-- Question 2 -->
+         <div class="quiz-question">
+            <h3>2. Which HTML element is used for the largest heading?</h3>
+            <div class="options">
+               <label>
+                  <input type="radio" name="q2" value="a"> &lt;heading&gt;
+               </label>
+               <label>
+                  <input type="radio" name="q2" value="b"> &lt;h6&gt;
+               </label>
+               <label>
+                  <input type="radio" name="q2" value="c"> &lt;h1&gt;
+               </label>
+            </div>
+         </div>
+
+         <!-- More questions... -->
+
+         <div class="quiz-actions">
+            <button type="submit" class="inline-btn">Submit Quiz</button>
+         </div>
+      </form>
+   </div>
+</div>
+
+<footer class="footer">
+   &copy; copyright @ 2025 by <span>EduNexus</span> | all rights reserved!
+</footer>
+
+<script src="../js/script.js"></script>
+<script>
+   // Enrollment functionality
+   document.querySelectorAll('.enroll-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+         e.preventDefault();
+         const courseId = this.getAttribute('data-course-id');
+
+         // Simulate AJAX call to enroll in course
+         fetch('enroll.php', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+               course_id: courseId,
+               student_id: getStudentId() // Function to get logged in student ID
+            })
+         })
+                 .then(response => response.json())
+                 .then(data => {
+                    if(data.success) {
+                       // Show study materials modal
+                       document.getElementById('studyMaterialsModal').style.display = 'block';
+                    } else {
+                       alert('Enrollment failed: ' + data.message);
+                    }
+                 });
+      });
+   });
+
+   // Quiz timer functionality
+   function startQuizTimer() {
+      let timeLeft = 900; // 15 minutes in seconds
+      const timerElement = document.getElementById('quizTime');
+
+      const timer = setInterval(() => {
+         const minutes = Math.floor(timeLeft / 60);
+         const seconds = timeLeft % 60;
+
+         timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+         if(timeLeft <= 0) {
+            clearInterval(timer);
+            document.getElementById('quizForm').submit();
+         }
+
+         timeLeft--;
+      }, 1000);
+   }
+
+   // When quiz modal opens
+   document.getElementById('quizModal').addEventListener('show', function() {
+      startQuizTimer();
+   });
+</script>
+</body>
+</html>

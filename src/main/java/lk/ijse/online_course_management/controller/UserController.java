@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -104,7 +105,7 @@ public class UserController {
 
     // Delete
     @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<ResponseDTO> deleteUser(@PathVariable String userId) {
+    public ResponseEntity<ResponseDTO> deleteUser(@PathVariable("userId") UUID userId) {
         try {
             int result = userService.deleteUser(userId);
             if (result == VarList.OK) {
@@ -117,15 +118,6 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
-        }
-    }
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable String userId) {
-        try {
-            UserDTO user = userService.getUserById(userId);
-            return ResponseEntity.ok(user);
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.notFound().build();
         }
     }
 

@@ -43,7 +43,7 @@ public class AssignmentSubServiceImpl implements AssignmentSubService {
                     .orElseThrow(() -> new RuntimeException("Assignment not found"));
 
             // Check if student exists
-            User student = userRepo.findById(String.valueOf(submissionDTO.getStudentId()))
+            User student = userRepo.findById((submissionDTO.getStudentId()))
                     .orElseThrow(() -> new RuntimeException("Student not found"));
 
             // Check for duplicate submission
@@ -100,7 +100,7 @@ public class AssignmentSubServiceImpl implements AssignmentSubService {
 
     @Override
     public List<AssignmentSubDTO> getSubmissionsByStudent(UUID studentId) {
-        User student = userRepo.findById(String.valueOf(studentId))
+        User student = userRepo.findById((studentId))
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         return assignmentSubRepo.findByStudent(student).stream()

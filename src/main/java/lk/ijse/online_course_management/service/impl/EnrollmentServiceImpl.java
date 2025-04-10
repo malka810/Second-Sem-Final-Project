@@ -33,7 +33,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     public int saveEnroll(EnrollmentDTO enrollmentDTO) {
         try {
             // Find user and verify they are a student
-            User user = userRepo.findById(String.valueOf(enrollmentDTO.getStudentId()))
+            User user = userRepo.findById((enrollmentDTO.getStudentId()))
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             if (!"STUDENT".equals(user.getRole())) {

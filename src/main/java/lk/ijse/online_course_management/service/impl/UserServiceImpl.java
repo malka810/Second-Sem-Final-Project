@@ -15,10 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,7 +66,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public int updateUser(UserDTO userDTO) {
-        Optional<User> optionalUser = userRepo.findById(String.valueOf(userDTO.getUserId()));
+        Optional<User> optionalUser = userRepo.findById((userDTO.getUserId()));
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
 
@@ -88,6 +85,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return VarList.Not_Found;
     }
 
+    @Override
+    public int deleteUser(UUID userId) {
+        if (userRepo.existsById(userId)) {
+            userRepo.deleteById(userId);
+            return VarList.OK;
+        }
+        return VarList.Not_Found;
+    }
+
     private boolean isValidRole(String role) {
         if (role == null) return false;
         String upperRole = role.toUpperCase();
@@ -97,14 +103,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     }
 
-    @Override
-    public int deleteUser(String userId) {
-        if (userRepo.existsById(userId)) {
-            userRepo.deleteById(userId);
-            return VarList.OK;
-        }
-        return VarList.Not_Found;
-    }
 
     @Override
     public int resetPassword(String email, String newPassword) {
@@ -118,7 +116,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public UserDTO getUserById(String userId) {
+    public UserDTO getUserById(UUID userId) {
         return userRepo.findById(userId)
                 .map(user -> {
                     UserDTO dto = modelMapper.map(user, UserDTO.class);

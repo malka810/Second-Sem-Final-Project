@@ -37,9 +37,9 @@
 
                     // Redirect based on role - now specifically for ADMIN
                     if (userData.role === "ADMIN") {
-                        window.location.href = "admin-dashboard.html";
+                        window.location.href = "../admin-dashboard.html";
                     } else if (userData.role === "INSTRUCTOR") {
-                        window.location.href = "teachers.html";
+                        window.location.href = "instructorDashboard.html";
                     } else {
                         window.location.href = "studentHome.html";
                     }
@@ -121,10 +121,10 @@
                         window.location.href = "admin-dashboard.html";
                         break;
                     case "INSTRUCTOR":
-                        window.location.href = "teachers.html";
+                        window.location.href = "../Instructor/instructorDashboard.html";
                         break;
                     case "STUDENT":
-                        window.location.href = "studentHome.html";
+                        window.location.href = "../Student/studentHome.html";
                         break;
                     default:
                         alert("Unknown user role: " + role);

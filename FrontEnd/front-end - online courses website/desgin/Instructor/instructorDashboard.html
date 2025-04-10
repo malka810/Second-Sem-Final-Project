@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Instructor Dashboard</title>
+
+   <!-- font awesome cdn link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="../css/style.css">
+<style>
+   /* Dashboard Section */
+   .dashboard {
+      padding: 2rem;
+   }
+
+   .dashboard .heading {
+      text-align: center;
+      padding-bottom: 2rem;
+      font-size: 2.5rem;
+      color: var(--black);
+   }
+
+   .dashboard .box-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+      gap: 1.5rem;
+      align-items: flex-start;
+   }
+
+   .dashboard .box {
+      background-color: var(--white);
+      border-radius: .5rem;
+      padding: 2rem;
+      box-shadow: var(--box-shadow);
+   }
+
+   .dashboard .box h3 {
+      font-size: 1.8rem;
+      color: var(--black);
+      margin-bottom: 1rem;
+   }
+
+   .dashboard .box p {
+      font-size: 1.6rem;
+      color: var(--light-color);
+      line-height: 1.8;
+      padding: .5rem 0;
+   }
+
+   /* Quick Actions */
+   .dashboard .box .flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+   }
+
+   .dashboard .inline-option-btn {
+      display: inline-block;
+      padding: 1rem 1.5rem;
+      background-color: var(--light-bg);
+      color: var(--black);
+      font-size: 1.6rem;
+      border-radius: .5rem;
+      cursor: pointer;
+      text-align: center;
+      margin-top: .5rem;
+      flex: 1 1 20rem;
+   }
+
+   .dashboard .inline-option-btn i {
+      margin-right: .5rem;
+      color: var(--main-color);
+   }
+
+   .dashboard .inline-option-btn:hover {
+      background-color: var(--main-color);
+      color: var(--white);
+   }
+
+   .dashboard .inline-option-btn:hover i {
+      color: var(--white);
+   }
+
+   /* Pending Tasks */
+   .dashboard .pending-tasks p {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 0;
+      border-bottom: var(--border);
+   }
+
+   .dashboard .pending-tasks p i {
+      font-size: 1.8rem;
+      color: var(--main-color);
+   }
+
+   /* Activities */
+   .dashboard .activities p {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 0;
+      border-bottom: var(--border);
+   }
+
+   .dashboard .activities p i {
+      font-size: 1.8rem;
+      color: var(--green);
+   }
+
+   /* Stats */
+   .dashboard .stats p {
+      font-size: 1.6rem;
+      padding: 1rem 0;
+      border-bottom: var(--border);
+   }
+
+   .dashboard .stats p span {
+      float: right;
+      font-weight: bold;
+      color: var(--main-color);
+   }
+
+   /* Deadlines */
+   .dashboard .deadlines p {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 0;
+      border-bottom: var(--border);
+   }
+
+   .dashboard .deadlines p i {
+      font-size: 1.8rem;
+      color: var(--orange);
+   }
+
+   /* Buttons */
+   .inline-btn {
+      display: inline-block;
+      padding: 1rem 1.5rem;
+      background-color: var(--main-color);
+      color: var(--white);
+      font-size: 1.6rem;
+      border-radius: .5rem;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 1rem;
+   }
+
+   .inline-btn:hover {
+      background-color: var(--black);
+      color: var(--white);
+   }
+
+   /* Responsive */
+   @media (max-width: 768px) {
+      .dashboard .box-container {
+         grid-template-columns: 1fr;
+      }
+
+      .dashboard .box {
+         padding: 1.5rem;
+      }
+   }
+</style>
+</head>
+<body>
+
+<header class="header">
+
+   <section class="flex">
+
+      <a href="instructorDashboard.html" class="logo"><img src="../images/logo.png" class="image" alt=""><b id="logoN" style="color: #9b2ed5">EduNexus</b></a>
+
+      <form action="../search.html" method="post" class="search-form">
+         <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
+         <button type="submit" class="fas fa-search"></button>
+      </form>
+
+      <div class="icons">
+         <div id="menu-btn" class="fas fa-bars"></div>
+         <div id="search-btn" class="fas fa-search"></div>
+         <div id="user-btn" class="fas fa-user"></div>
+         <div id="toggle-btn" class="fas fa-sun"></div>
+      </div>
+
+      <div class="profile">
+         <img src="../images/User.png" class="image" alt="">
+         <p class="role">Instructor</p>
+         <a href="../profile.html" class="btn">view profile</a>
+         <div class="flex-btn">
+            <a href="../logout.html" class="option-btn">logout</a>
+         </div>
+      </div>
+
+   </section>
+
+</header>
+
+<div class="side-bar">
+
+   <div id="close-btn">
+      <i class="fas fa-times"></i>
+   </div>
+
+   <div class="profile">
+      <img src="../images/User.png" class="image" alt="">
+      <p class="role">Instructor</p>
+      <a href="../profile.html" class="btn">view profile</a>
+   </div>
+
+   <nav class="navbar">
+      <a href="instructorDashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+      <a href="uploadLecture.html"><i class="fas fa-upload"></i><span>Upload Lectures</span></a>
+      <a href="assignments.html"><i class="fas fa-tasks"></i><span>Assign Assignments</span></a>
+      <a href="quizzes.html"><i class="fas fa-question-circle"></i><span>Create Quizzes</span></a>
+      <a href="submissions.html"><i class="fas fa-file-alt"></i><span>Review Submissions</span></a>
+      <a href="grades.html"><i class="fas fa-graduation-cap"></i><span>Grade Students</span></a>
+      <a href="../about.html"><i class="fas fa-question"></i><span>About</span></a>
+      <a href="../contact.html"><i class="fas fa-headset"></i><span>Contact Us</span></a>
+   </nav>
+
+</div>
+
+<section class="dashboard">
+
+   <h1 class="heading">Instructor Dashboard</h1>
+
+   <div class="box-container">
+
+      <div class="box">
+         <h3>Welcome!</h3>
+         <p>Manage your courses, upload materials, and track student progress from this dashboard.</p>
+         <a href="uploadLecture.html" class="inline-btn">Upload New Lecture</a>
+      </div>
+
+      <div class="box">
+         <h3>Quick Actions</h3>
+         <div class="flex">
+            <a href="assignments.html" class="inline-option-btn"><i class="fas fa-tasks"></i> Create Assignment</a>
+            <a href="quizzes.html" class="inline-option-btn"><i class="fas fa-question-circle"></i> Make Quiz</a>
+            <a href="submissions.html" class="inline-option-btn"><i class="fas fa-file-alt"></i> Check Submissions</a>
+            <a href="grades.html" class="inline-option-btn"><i class="fas fa-graduation-cap"></i> Enter Grades</a>
+         </div>
+      </div>
+
+      <div class="box">
+         <h3>Pending Tasks</h3>
+         <div class="pending-tasks">
+            <p><i class="fas fa-file-alt"></i> 12 assignments to grade</p>
+            <p><i class="fas fa-comments"></i> 5 student questions</p>
+            <p><i class="fas fa-clock"></i> 3 quizzes to create</p>
+         </div>
+         <a href="submissions.html" class="inline-btn">View All</a>
+      </div>
+
+      <div class="box">
+         <h3>Recent Activities</h3>
+         <div class="activities">
+            <p><i class="fas fa-check-circle"></i> Graded CS101 Assignment 3</p>
+            <p><i class="fas fa-upload"></i> Uploaded Week 5 Lecture</p>
+            <p><i class="fas fa-comment"></i> Replied to student query</p>
+         </div>
+      </div>
+
+      <div class="box">
+         <h3>Course Statistics</h3>
+         <div class="stats">
+            <p>Active Courses: <span>4</span></p>
+            <p>Total Students: <span>87</span></p>
+            <p>Assignments Due: <span>2</span></p>
+         </div>
+         <a href="#" class="inline-btn">View Detailed Reports</a>
+      </div>
+
+      <div class="box">
+         <h3>Upcoming Deadlines</h3>
+         <div class="deadlines">
+            <p><i class="fas fa-calendar-alt"></i> CS101 Assignment 4 - Due May 15</p>
+            <p><i class="fas fa-calendar-alt"></i> MATH202 Quiz 2 - Due May 18</p>
+            <p><i class="fas fa-calendar-alt"></i> Grade submissions - By May 20</p>
+         </div>
+      </div>
+
+   </div>
+
+</section>
+
+<footer class="footer">
+   &copy; copyright @ 2023 by <span>EduNexus</span> | all rights reserved!
+</footer>
+
+<!-- custom js file link  -->
+<script src="../js/script.js"></script>
+
+</body>
+</html>

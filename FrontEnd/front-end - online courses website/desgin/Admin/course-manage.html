@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        /* Course Management Specific Styles */
+        .course-management {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: .5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.5rem 2rem;
+            background: var(--main-color);
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.6rem;
+            border: var(--border);
+            border-radius: .5rem;
+            background: var(--light-bg);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.6rem;
+            color: var(--black);
+        }
+
+        .text-danger {
+            color: var(--red);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: .5rem;
+            font-size: 1.6rem;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary {
+            background: var(--light-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--orange);
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 1.4rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 1.2rem;
+            text-align: left;
+            border-bottom: var(--border);
+            font-size: 1.5rem;
+        }
+
+        .table th {
+            background: var(--light-bg);
+            font-weight: 600;
+        }
+
+        .table tr:hover {
+            background: rgba(155, 46, 213, 0.05);
+        }
+
+        .img-thumbnail {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: var(--border);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+        }
+
+        .bg-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .bg-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <section class="flex">
+        <a href="../admin-dashboard.html" class="logo">
+            <img src="../images/logo.png" class="image" alt="">
+            <b id="logoN" style="color: #9b2ed5">EduNexus</b>
+        </a>
+
+        <form action="../search.html" method="post" class="search-form">
+            <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
+            <button type="submit" class="fas fa-search"></button>
+        </form>
+
+        <div class="icons">
+            <div id="menu-btn" class="fas fa-bars"></div>
+            <div id="search-btn" class="fas fa-search"></div>
+            <div id="user-btn" class="fas fa-user"></div>
+            <div id="toggle-btn" class="fas fa-sun"></div>
+            <a href="../index.html" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="logout-text">Logout</span>
+            </a>
+        </div>
+
+        <div class="profile">
+            <img src="../images/User.png" width="80" height="80" class="image" alt="">
+            <p class="role">Admin</p>
+            <a href="../profile.html" class="btn">view profile</a>
+        </div>
+    </section>
+</header>
+
+<div class="side-bar">
+    <div id="close-btn">
+        <i class="fas fa-times"></i>
+    </div>
+
+    <div class="profile">
+        <img src="../images/User.png" class="image" alt="">
+        <p class="role">Admin</p>
+        <a href="../profile.html" class="btn">view profile</a>
+    </div>
+
+    <nav class="navbar">
+        <a href="../admin-dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+        <a href="course-management.html" class="active"><i class="fas fa-book"></i><span>Course Management</span></a>
+        <a href="add-course.html"><i class="fas fa-plus-circle"></i><span>Add New Course</span></a>
+        <a href="course-categories.html"><i class="fas fa-tags"></i><span>Course Categories</span></a>
+        <a href="course-reports.html"><i class="fas fa-chart-bar"></i><span>Course Reports</span></a>
+    </nav>
+</div>
+
+<section class="course-management">
+    <!-- Course Form -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-book"></i> Course Information
+        </div>
+        <div class="card-body">
+            <form id="courseForm">
+                <!-- Title Field -->
+                <div class="form-group">
+                    <label for="title" class="form-label">Course Title <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="title" placeholder="Enter course title" required>
+                </div>
+
+                <!-- Description Field -->
+                <div class="form-group">
+                    <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="description" rows="3" placeholder="Enter course description" required></textarea>
+                </div>
+
+                <!-- Instructor Selection -->
+                <div class="form-group">
+                    <label for="instructor" class="form-label">Instructor <span class="text-danger">*</span></label>
+                    <select class="form-control" id="instructor" required>
+                        <option value="" disabled selected>Select Instructor</option>
+                        <!-- Instructors will be loaded dynamically -->
+                    </select>
+                </div>
+
+                <!-- Course Image Upload -->
+                <div class="form-group">
+                    <label for="courseImage" class="form-label">Course Image</label>
+                    <input type="file" class="form-control" id="courseImage" accept="image/*">
+                    <div id="courseImagePreview" class="mt-2" style="display: none;">
+                        <img src="" alt="Course Image Preview" style="max-width: 200px; border-radius: 0.5rem;">
+                    </div>
+                </div>
+
+                <!-- Hidden field for course ID -->
+                <input type="hidden" id="courseId">
+
+                <!-- Action Buttons -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" id="resetCourseBtn">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                    <button type="button" class="btn btn-danger" id="deleteCourseBtn" style="display: none;">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                    <button type="button" class="btn btn-warning" id="updateCourseBtn" style="display: none;">
+                        <i class="fas fa-pencil-alt"></i> Update
+                    </button>
+                    <button type="submit" class="btn btn-success" id="saveCourseBtn">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Courses Table -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-list"></i> Course List
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Instructor</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="courseTableBody">
+                    <!-- Courses will be loaded here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    &copy; copyright @ 2025 by <span>EduNexus</span> | all rights reserved!
+</footer>
+
+<!-- jQuery -->
+<script src="../js/jquery.js"></script>
+<!-- Custom JS -->
+<script src="../js/script.js"></script>
+
+<script>
+    // Global variable to store current course data
+    let currentCourse = null;
+    let instructors = [];
+
+    // Load all courses
+    function loadCourses() {
+        $.ajax({
+            url: "http://localhost:3030/api/v1/course/all",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function(response) {
+                const tableBody = $("#courseTableBody");
+                tableBody.empty();
+
+                response.data.forEach(course => {
+                    const row = `
+                        <tr>
+                            <td>${course.courseId}</td>
+                            <td>${course.title}</td>
+                            <td>${course.description.substring(0, 50)}${course.description.length > 50 ? '...' : ''}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="${course.instructor.profileImage || '../images/User.png'}" class="img-thumbnail me-2">
+                                    ${course.instructor.fullName}
+                                </div>
+                            </td>
+                            <td><span class="badge ${course.active ? 'bg-success' : 'bg-danger'}">${course.active ? 'Active' : 'Inactive'}</span></td>
+                            <td class="action-buttons">
+                                <button class="btn btn-warning btn-sm edit-course-btn" data-id="${course.courseId}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-course-btn" data-id="${course.courseId}">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                                <button class="btn btn-info btn-sm toggle-status-btn" data-id="${course.courseId}" data-status="${course.active}">
+                                    <i class="fas fa-power-off"></i> ${course.active ? 'Deactivate' : 'Activate'}
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.append(row);
+                });
+            },
+            error: function(xhr) {
+                console.error("Error loading courses:", xhr);
+                alert("Error loading courses: " + (xhr.responseJSON?.message || "Server error"));
+            }
+        });
+    }
+
+    // Load all instructors
+    function loadInstructors() {
+        $.ajax({
+            url: "http://localhost:3030/api/v1/user/instructors",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function(response) {
+                instructors = response.data;
+                const instructorSelect = $("#instructor");
+                instructorSelect.empty();
+                instructorSelect.append('<option value="" disabled selected>Select Instructor</option>');
+
+                instructors.forEach(instructor => {
+                    instructorSelect.append(`<option value="${instructor.userId}">${instructor.fullName}</option>`);
+                });
+            },
+            error: function(xhr) {
+                console.error("Error loading instructors:", xhr);
+                alert("Error loading instructors: " + (xhr.responseJSON?.message || "Server error"));
+            }
+        });
+    }
+
+    // Form reset function
+    function resetCourseForm() {
+        $("#courseForm")[0].reset();
+        $("#courseImagePreview").hide();
+        $("#courseId").val("");
+        $("#deleteCourseBtn, #updateCourseBtn").hide();
+        $("#saveCourseBtn").show();
+        currentCourse = null;
+    }
+
+    // Save/Add new course
+    $("#courseForm").submit(function(e) {
+        e.preventDefault();
+
+        const selectedInstructorId = $("#instructor").val();
+        const instructor = instructors.find(i => i.userId === selectedInstructorId);
+
+        if (!instructor) {
+            alert("Please select an instructor!");
+            return;
+        }
+
+        const courseData = {
+            title: $("#title").val(),
+            description: $("#description").val(),
+            instructorId: instructor.userId,
+            instructorName: instructor.fullName
+        };
+
+        const formData = new FormData();
+        formData.append("course", JSON.stringify(courseData));
+
+        const courseImage = $("#courseImage")[0].files[0];
+        if (courseImage) {
+            formData.append("courseImage", courseImage);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3030/api/v1/course/create",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function(response) {
+                alert("Course created successfully!");
+                resetCourseForm();
+                loadCourses();
+            },
+            error: function(xhr) {
+                console.error("Error creating course:", xhr);
+                alert("Error creating course: " + (xhr.responseJSON?.message || "Server error"));
+            }
+        });
+    });
+
+    // Edit course
+    $(document).on("click", ".edit-course-btn", function() {
+        const courseId = $(this).data("id");
+
+        $.ajax({
+            type: "GET",
+            url: `http://localhost:3030/api/v1/course/${courseId}`,
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function(response) {
+                currentCourse = response.data;
+
+                $("#courseId").val(currentCourse.courseId);
+                $("#title").val(currentCourse.title);
+                $("#description").val(currentCourse.description);
+                $("#instructor").val(currentCourse.instructor.userId);
+
+                if (currentCourse.imageUrl) {
+                    $("#courseImagePreview img").attr("src", currentCourse.imageUrl);
+                    $("#courseImagePreview").show();
+                }
+
+                $("#deleteCourseBtn, #updateCourseBtn").show();
+                $("#saveCourseBtn").hide();
+            },
+            error: function(xhr) {
+                console.error("Error fetching course:", xhr);
+                alert("Error fetching course: " + (xhr.responseJSON?.message || "Server error"));
+            }
+        });
+    });
+
+    // Update course
+    $("#updateCourseBtn").click(function() {
+        if (!currentCourse) return;
+
+        const selectedInstructorId = $("#instructor").val();
+        const instructor = instructors.find(i => i.userId === selectedInstructorId);
+
+        if (!instructor) {
+            alert("Please select an instructor!");
+            return;
+        }
+
+        const courseData = {
+            title: $("#title").val(),
+            description: $("#description").val(),
+            instructorId: instructor.userId,
+            instructorName: instructor.fullName
+        };
+
+        const formData = new FormData();
+        formData.append("course", JSON.stringify(courseData));
+
+        const courseImage = $("#courseImage")[0].files[0];
+        if (courseImage) {
+            formData.append("courseImage", courseImage);
+        }
+
+        $.ajax({
+            type: "PUT",
+            url: `http://localhost:3030/api/v1/course/update/${currentCourse.courseId}`,
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success

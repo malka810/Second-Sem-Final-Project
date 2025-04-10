@@ -19,7 +19,7 @@
 
     <section class="flex">
 
-        <a href="studentHome.html" class="logo"><img src="images/logo.png" class="image" alt=""><b id="logoN" style="color: #9b2ed5">EduNexus</b></a>
+        <a href="Student/studentHome.html" class="logo"><img src="images/logo.png" class="image" alt=""><b id="logoN" style="color: #9b2ed5">EduNexus</b></a>
 
         <form action="search.html" method="post" class="search-form">
             <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
@@ -34,9 +34,9 @@
         </div>
 
         <div class="profile">
-            <img src="images/User.png"  width="80" height="80" class="image" alt="">
-            <p class="role">User</p>
-            <a href="profile.html" class="btn">view profile</a>
+            <img src="images/User.png" width="80" height="80" class="image" alt="">
+            <p class="role">Admin</p>
+            <a href="profile.html" class="btn" >view profile</a>
         </div>
 
     </section>
@@ -51,20 +51,101 @@
 
     <div class="profile">
         <img src="images/User.png" class="image" alt="">
-        <p class="role">User</p>
+        <p class="role">Admin</p>
         <a href="profile.html" class="btn">view profile</a>
     </div>
 
     <nav class="navbar">
-        <a href="studentHome.html"><i class="fas fa-home"></i><span>Home</span></a>
-        <a href="about.html"><i class="fas fa-question"></i><span>About</span></a>
-        <a href="courses.html"><i class="fas fa-graduation-cap"></i><span>Courses</span></a>
-        <a href="users.html"><i class="fas fa-chalkboard-user"></i><span>Users</span></a>
-        <a href="contact.html"><i class="fas fa-headset"></i><span>Contact us</span></a>
+        <a href="admin-dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+        <a href="Admin/course-manage.html"><i class="fas fa-graduation-cap"></i><span>Manage Courses</span></a>
+        <a href="Admin/users.html"><i class="fas fa-chalkboard-user"></i><span>Manage Users</span></a>
+        <a href="Admin/StudentEnrollments.html"><i class="fas fa-tasks"></i><span>Enrollments</span></a>
+<!--        <a href="../settings.html"><i class="fas fa-cog"></i><span>Settings</span></a>-->
+<!--        <a href="contact.html"><i class="fas fa-headset"></i><span>Contact us</span></a>-->
+        <a href="index.html" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="logout-text">Logout</span>
+        </a>
+
+
     </nav>
 
 </div>
+<section class="dashboard">
 
+    <h1 class="heading">Admin Dashboard</h1>
+
+    <div class="admin-stats">
+        <div class="stat-card">
+            <h3>1,245</h3>
+            <p>Total Students</p>
+        </div>
+        <div class="stat-card">
+            <h3>56</h3>
+            <p>Total Instructors</p>
+        </div>
+        <div class="stat-card">
+            <h3>32</h3>
+            <p>Active Courses</p>
+        </div>
+
+    </div>
+
+    <div class="admin-actions">
+        <a href="adminCourses.html" class="action-card">
+            <i class="fas fa-plus-circle"></i>
+            <h3>Add New Course</h3>
+            <p>Create and publish new learning content</p>
+        </a>
+        <a href="adminUsers.html" class="action-card">
+            <i class="fas fa-user-plus"></i>
+            <h3>Add New User</h3>
+            <p>Create accounts for students and instructors</p>
+        </a>
+        <a href="adminEnrollments.html" class="action-card">
+            <i class="fas fa-user-graduate"></i>
+            <h3>Manage Enrollments</h3>
+            <p>View and manage course enrollments</p>
+        </a>
+    </div>
+
+    <div class="recent-activity">
+        <h2 class="sub-heading">Recent Activity</h2>
+
+        <div class="activity-item">
+            <i class="fas fa-user-plus"></i>
+            <div>
+                <p>New student registration - John Smith</p>
+                <small>10 minutes ago</small>
+            </div>
+        </div>
+
+        <div class="activity-item">
+            <i class="fas fa-graduation-cap"></i>
+            <div>
+                <p>New course published - "Advanced React"</p>
+                <small>2 hours ago</small>
+            </div>
+        </div>
+
+        <div class="activity-item">
+            <i class="fas fa-chalkboard-user"></i>
+            <div>
+                <p>New instructor onboarded - Sarah Johnson</p>
+                <small>5 hours ago</small>
+            </div>
+        </div>
+
+        <div class="activity-item">
+            <i class="fas fa-dollar-sign"></i>
+            <div>
+                <p>New payment received - $245.00</p>
+                <small>Yesterday</small>
+            </div>
+        </div>
+    </div>
+
+</section>
 <section class="home-grid">
 
     <h1 class="heading">quick options</h1>
@@ -110,7 +191,7 @@
         <div class="box">
             <h3 class="title">become a tutor</h3>
             <p class="tutor">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Perspiciatis, nam?</p>
-            <a href="teachers.html" class="inline-btn">get started</a>
+            <a href="Instructor/instructorDashboard.html" class="inline-btn">get started</a>
         </div>
 
     </div>
@@ -138,7 +219,7 @@
                 <span>10 videos</span>
             </div>
             <h3 class="title">complete HTML tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
+            <a href="Student/playlist.html" class="inline-btn">view playlist</a>
         </div>
 
         <div class="box">
@@ -154,7 +235,7 @@
                 <span>10 videos</span>
             </div>
             <h3 class="title">complete CSS tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
+            <a href="Student/playlist.html" class="inline-btn">view playlist</a>
         </div>
 
         <div class="box">
@@ -170,7 +251,7 @@
                 <span>10 videos</span>
             </div>
             <h3 class="title">complete JS tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
+            <a href="Student/playlist.html" class="inline-btn">view playlist</a>
         </div>
 
         <div class="box">
@@ -186,7 +267,7 @@
                 <span>10 videos</span>
             </div>
             <h3 class="title">complete Boostrap tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
+            <a href="Student/playlist.html" class="inline-btn">view playlist</a>
         </div>
 
         <div class="box">
@@ -202,7 +283,7 @@
                 <span>10 videos</span>
             </div>
             <h3 class="title">complete JQuery tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
+            <a href="Student/playlist.html" class="inline-btn">view playlist</a>
         </div>
 
         <div class="box">
@@ -218,13 +299,13 @@
                 <span>10 videos</span>
             </div>
             <h3 class="title">complete SASS tutorial</h3>
-            <a href="playlist.html" class="inline-btn">view playlist</a>
+            <a href="Student/playlist.html" class="inline-btn">view playlist</a>
         </div>
 
     </div>
 
     <div class="more-btn">
-        <a href="courses.html" class="inline-option-btn">view all courses</a>
+        <a href="Student/courses.html" class="inline-option-btn">view all courses</a>
     </div>
 
 </section>

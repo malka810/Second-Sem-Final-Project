@@ -32,7 +32,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public int saveCourse(CourseDTO courseDTO) {
         try {
-            User instructor = userRepository.findById(String.valueOf(courseDTO.getInstructorId()))
+            User instructor = userRepository.findById((courseDTO.getInstructorId()))
                     .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
             if (!"INSTRUCTOR".equals(instructor.getRole())) {
@@ -76,7 +76,7 @@ public class CourseServiceImpl implements CourseService {
                 return VarList.Not_Found;
             }
 
-            User instructor = userRepository.findById(String.valueOf(courseDTO.getInstructorId()))
+            User instructor = userRepository.findById((courseDTO.getInstructorId()))
                     .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
             if (!"INSTRUCTOR".equals(instructor.getRole())) {
