@@ -194,9 +194,6 @@
          <img src="images/User.png" class="image" alt="">
          <p class="role">Instructor</p>
          <a href="profile.html" class="btn">view profile</a>
-         <div class="flex-btn">
-            <a href="../logout.html" class="option-btn">logout</a>
-         </div>
       </div>
 
    </section>
@@ -217,13 +214,16 @@
 
    <nav class="navbar">
       <a href="instructorDashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
-      <a href="uploadLecture.html"><i class="fas fa-upload"></i><span>Upload Lectures</span></a>
-      <a href="assignments.html"><i class="fas fa-tasks"></i><span>Assign Assignments</span></a>
-      <a href="quizzes.html"><i class="fas fa-question-circle"></i><span>Create Quizzes</span></a>
-      <a href="submissions.html"><i class="fas fa-file-alt"></i><span>Review Submissions</span></a>
-      <a href="grades.html"><i class="fas fa-graduation-cap"></i><span>Grade Students</span></a>
-      <a href="about.html"><i class="fas fa-question"></i><span>About</span></a>
-      <a href="contact.html"><i class="fas fa-headset"></i><span>Contact Us</span></a>
+      <a href="Instructor/lectureUpload.html"><i class="fas fa-upload"></i><span>Upload Lectures</span></a>
+      <a href="Instructor/assignmentCreate.html"><i class="fas fa-tasks"></i><span>Assign Assignments</span></a>
+      <a href="Instructor/quizCreate.html"><i class="fas fa-question-circle"></i><span>Create Quizzes</span></a>
+      <a href="Instructor/submissionReview.html"><i class="fas fa-file-alt"></i><span>Review Submissions</span></a>
+      <a href="Instructor/grade.html"><i class="fas fa-graduation-cap"></i><span>Grade Students</span></a>
+      <a href="index.html" class="logout-btn">
+         <i class="fas fa-sign-out-alt"></i>
+         <span class="logout-text">Logout</span>
+      </a>
+
    </nav>
 
 </div>
@@ -237,16 +237,16 @@
       <div class="box">
          <h3>Welcome!</h3>
          <p>Manage your courses, upload materials, and track student progress from this dashboard.</p>
-         <a href="uploadLecture.html" class="inline-btn">Upload New Lecture</a>
+         <a href="Instructor/lectureUpload.html" class="inline-btn">Upload New Lecture</a>
       </div>
 
       <div class="box">
          <h3>Quick Actions</h3>
          <div class="flex">
-            <a href="assignments.html" class="inline-option-btn"><i class="fas fa-tasks"></i> Create Assignment</a>
-            <a href="quizzes.html" class="inline-option-btn"><i class="fas fa-question-circle"></i> Make Quiz</a>
-            <a href="submissions.html" class="inline-option-btn"><i class="fas fa-file-alt"></i> Check Submissions</a>
-            <a href="grades.html" class="inline-option-btn"><i class="fas fa-graduation-cap"></i> Enter Grades</a>
+            <a href="Instructor/assignmentCreate.html" class="inline-option-btn"><i class="fas fa-tasks"></i> Create Assignment</a>
+            <a href="Instructor/quizCreate.html" class="inline-option-btn"><i class="fas fa-question-circle"></i> Make Quiz</a>
+            <a href="Instructor/submissionReview.html" class="inline-option-btn"><i class="fas fa-file-alt"></i> Check Submissions</a>
+            <a href="Instructor/grade.html" class="inline-option-btn"><i class="fas fa-graduation-cap"></i> Enter Grades</a>
          </div>
       </div>
 
@@ -257,7 +257,7 @@
             <p><i class="fas fa-comments"></i> 5 student questions</p>
             <p><i class="fas fa-clock"></i> 3 quizzes to create</p>
          </div>
-         <a href="submissions.html" class="inline-btn">View All</a>
+         <a href="Instructor/viewAllsubmissions.html" class="inline-btn">View All</a>
       </div>
 
       <div class="box">
