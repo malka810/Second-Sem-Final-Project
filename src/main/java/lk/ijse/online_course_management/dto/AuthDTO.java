@@ -24,6 +24,9 @@ public class AuthDTO {
         this.loginTime = loginTime;
     }
 
+    public AuthDTO(String email, String token) {
+    }
+
     public Long getLogId() {
         return logId;
     }

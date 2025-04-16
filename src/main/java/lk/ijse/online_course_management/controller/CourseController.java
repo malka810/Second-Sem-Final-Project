@@ -6,6 +6,7 @@ import lk.ijse.online_course_management.service.CourseService;
 import lk.ijse.online_course_management.util.VarList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +21,48 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseDTO> createCourse(@RequestBody CourseDTO courseDTO) {
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO> createCourse(
+            @RequestBody CourseDTO courseDTO,
+            @RequestParam(value = "imageName", required = false) String imageName) {
+
         try {
+            if (imageName != null && !imageName.isEmpty()) {
+                courseDTO.setImagePath("/design/images/" + imageName);
+            } else {
+                courseDTO.setImagePath("/design/images/default-course.png");
+            }
+
             int createdCourse = courseService.saveCourse(courseDTO);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseDTO(VarList.Success, "Course created successfully", createdCourse));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(VarList.RSP_ERROR, "Error: " + e.getMessage(), null));
+        }
+    }
+
+//    @PostMapping("/create")
+//    public ResponseEntity<ResponseDTO> createCourse(@RequestBody CourseDTO courseDTO) {
+//        try {
+//            int createdCourse = courseService.saveCourse(courseDTO);
+//            return ResponseEntity.status(HttpStatus.CREATED)
+//                    .body(new ResponseDTO(VarList.Success, "Course created successfully", createdCourse));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ResponseDTO(VarList.RSP_ERROR, "Error: " + e.getMessage(), null));
+//        }
+//    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ResponseDTO> getAllCourses() {
+        try {
+            List<CourseDTO> courses = courseService.getAllCourses();
+            return ResponseEntity.ok()
+                    .body(new ResponseDTO(VarList.Success, "Courses retrieved successfully", courses));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.RSP_ERROR, "Error retrieving courses", null));
         }
     }
 

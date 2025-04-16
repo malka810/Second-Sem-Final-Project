@@ -10,14 +10,16 @@ public class CourseDTO {
     private String description;
     private UUID instructorId;
     private String instructorName;
+    private String imagePath;
 
     public CourseDTO(){}
 
-    public CourseDTO(UUID courseId, String title, String description, UUID instructorId, String instructorName) {
+    public CourseDTO(UUID courseId, String title, String description, UUID instructorId, String instructorName, String imagePath) {
         this.title = title;
         this.description = description;
         this.instructorId = instructorId;
         this.instructorName = instructorName;
+        this.imagePath = imagePath;
     }
 
     public UUID getCourseId() {
@@ -60,22 +62,22 @@ public class CourseDTO {
         this.instructorName = instructorName;
     }
 
-    public static CourseDTO fromEntity(Course course) {
-        return new CourseDTO(
-                course.getCourseId(),
-                course.getTitle(),
-                course.getDescription(),
-                course.getInstructor().getUserId(),
-                course.getInstructorName()
-        );
+    public String getImagePath() {
+        return imagePath;
+    }
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
-    public Course toEntity() {
-        return new Course(
-                this.title,
-                this.description,
-                this.instructorName,
-                null  // Instructor will be set separately
-        );
+    @Override
+    public String toString() {
+        return "CourseDTO{" +
+                "courseId=" + courseId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", instructorId=" + instructorId +
+                ", instructorName='" + instructorName + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                '}';
     }
 }

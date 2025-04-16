@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*")
@@ -35,15 +38,24 @@ public class UserController {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
+
     @PostMapping(value = "/register", consumes = {"multipart/form-data"})
     public ResponseEntity<ResponseDTO> registerUser(@RequestPart("user") @Validated UserDTO userDTO,
                                                     @RequestParam("profileImage") MultipartFile file) {
         try {
+            if (file.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseDTO(VarList.Bad_Request, "Profile image is required", null));
+            }
+
+            if (file.getSize() > 10 * 1024 * 1024) {
+                return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+                        .body(new ResponseDTO(VarList.Payload_Too_Large, "File size exceeds maximum limit of 10MB", null));
+            }
 
             String originalFilename = file.getOriginalFilename();
             Path fileNameAndPath = Paths.get(uploadDirectory, originalFilename);
             Files.write(fileNameAndPath, file.getBytes());
-//            String imagePath = userService.saveProfileImage(file);
             userDTO.setProfileImage(originalFilename);
 
             int res = userService.saveUser(userDTO);
@@ -71,8 +83,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
         }
-
     }
+
     // Get all
     @GetMapping("/all")
     public ResponseEntity<ResponseDTO> getAllUsers() {
@@ -131,6 +143,34 @@ public class UserController {
         }
     }
 
+    @PostMapping("/reset-password/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> resetPassword(@PathVariable UUID userId) {
+        try {
+            // Set a fixed default password
+            String defaultPassword = "password123"; // You can change this to your preferred default
+
+            // Reset the password in the service layer
+            int result = userService.resetPassword(userId, defaultPassword);
+
+            if (result == VarList.OK) {
+                return ResponseEntity.ok()
+                        .body(new ResponseDTO(VarList.OK, "Password reset to default successfully", null));
+            } else if (result == VarList.Not_Found) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseDTO(VarList.Not_Found, "User not found", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ResponseDTO(VarList.Internal_Server_Error, "Error resetting password", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
+        }
+    }
+
 
 
 }
+
+

@@ -23,7 +23,7 @@
         .card {
             background: var(--white);
             border-radius: .5rem;
-            box-shadow: var(--box-shadow);
+            /*box-shadow: var(--box-shadow);*/
             margin-bottom: 2rem;
             overflow: hidden;
         }
@@ -201,10 +201,6 @@
             <div id="search-btn" class="fas fa-search"></div>
             <div id="user-btn" class="fas fa-user"></div>
             <div id="toggle-btn" class="fas fa-sun"></div>
-            <a href="../index.html" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="logout-text">Logout</span>
-            </a>
         </div>
 
         <div class="profile">
@@ -228,10 +224,12 @@
 
     <nav class="navbar">
         <a href="../admin-dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
-        <a href="course-management.html" class="active"><i class="fas fa-book"></i><span>Course Management</span></a>
-        <a href="add-course.html"><i class="fas fa-plus-circle"></i><span>Add New Course</span></a>
+        <a href="course-manage.html" class="active"><i class="fas fa-book"></i><span>Course Management</span></a>
         <a href="course-categories.html"><i class="fas fa-tags"></i><span>Course Categories</span></a>
-        <a href="course-reports.html"><i class="fas fa-chart-bar"></i><span>Course Reports</span></a>
+        <a href="../index.html" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="logout-text">Logout</span>
+        </a>
     </nav>
 </div>
 
@@ -242,7 +240,7 @@
             <i class="fas fa-book"></i> Course Information
         </div>
         <div class="card-body">
-            <form id="courseForm">
+            <form id="addCourseForm">
                 <!-- Title Field -->
                 <div class="form-group">
                     <label for="title" class="form-label">Course Title <span class="text-danger">*</span></label>
@@ -259,8 +257,7 @@
                 <div class="form-group">
                     <label for="instructor" class="form-label">Instructor <span class="text-danger">*</span></label>
                     <select class="form-control" id="instructor" required>
-                        <option value="" disabled selected>Select Instructor</option>
-                        <!-- Instructors will be loaded dynamically -->
+                        <option value="">Select Instructor</option>
                     </select>
                 </div>
 
@@ -305,11 +302,9 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Title</th>
                         <th>Description</th>
                         <th>Instructor</th>
-                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -332,14 +327,65 @@
 <script src="../js/script.js"></script>
 
 <script>
-    // Global variable to store current course data
-    let currentCourse = null;
-    let instructors = [];
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load instructors
+        loadInstructors();
 
-    // Load all courses
+        loadCourses();
+
+    });
+
+
+    // function loadCourses() {
+    //     $.ajax({
+    //         url: "http://localhost:3030/api/v1/courses/all",
+    //         type: "GET",
+    //         headers: {
+    //             "Authorization": "Bearer " + localStorage.getItem("authToken")
+    //         },
+    //         success: function(response) {
+    //             const tableBody = $("#courseTableBody");
+    //             tableBody.empty();
+    //
+    //             response.data.forEach(course => {
+    //                 const row = `
+    //                     <tr>
+    //                         <td>${course.courseId}</td>
+    //                         <td>${course.title}</td>
+    //                         <td>${course.description.substring(0, 50)}${course.description.length > 50 ? '...' : ''}</td>
+    //                         <td>
+    //                             <div class="d-flex align-items-center">
+    //                                 <img src="${course.instructor.profileImage || '../images/User.png'}" class="img-thumbnail me-2">
+    //                                 ${course.instructor.fullName}
+    //                             </div>
+    //                         </td>
+    //                         <td><span class="badge ${course.active ? 'bg-success' : 'bg-danger'}">${course.active ? 'Active' : 'Inactive'}</span></td>
+    //                         <td class="action-buttons">
+    //                             <button class="btn btn-warning btn-sm edit-course-btn" data-id="${course.courseId}">
+    //                                 <i class="fas fa-edit"></i> Edit
+    //                             </button>
+    //                             <button class="btn btn-danger btn-sm delete-course-btn" data-id="${course.courseId}">
+    //                                 <i class="fas fa-trash"></i> Delete
+    //                             </button>
+    //                             <button class="btn btn-info btn-sm toggle-status-btn" data-id="${course.courseId}" data-status="${course.active}">
+    //                                 <i class="fas fa-power-off"></i> ${course.active ? 'Deactivate' : 'Activate'}
+    //                             </button>
+    //                         </td>
+    //                     </tr>
+    //                 `;
+    //                 tableBody.append(row);
+    //             });
+    //         },
+    //         error: function(xhr) {
+    //             console.error("Error loading courses:", xhr);
+    //             alert("Error loading courses: " + (xhr.responseJSON?.message || "Server error"));
+    //         }
+    //     });
+    // }
+
     function loadCourses() {
         $.ajax({
-            url: "http://localhost:3030/api/v1/course/all",
+            url: "http://localhost:3030/api/v1/courses/all",
             type: "GET",
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("authToken")
@@ -348,19 +394,28 @@
                 const tableBody = $("#courseTableBody");
                 tableBody.empty();
 
-                response.data.forEach(course => {
-                    const row = `
+                if (response.data && response.data.length > 0) {
+                    response.data.forEach(course => {
+                        // Safely get instructor name based on your API structure
+                        let instructorName = 'Unknown instructor';
+
+                        // Check different possible structures
+                        if (course.instructor && course.instructor.fullName) {
+                            instructorName = course.instructor.fullName;
+                        }
+                        // Add additional checks if your API structure differs
+                        else if (course.instructorName) {
+                            instructorName = course.instructorName;
+                        }
+                        else if (course.instructor_full_name) {
+                            instructorName = course.instructor_full_name;
+                        }
+
+                        const row = `
                         <tr>
-                            <td>${course.courseId}</td>
-                            <td>${course.title}</td>
-                            <td>${course.description.substring(0, 50)}${course.description.length > 50 ? '...' : ''}</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="${course.instructor.profileImage || '../images/User.png'}" class="img-thumbnail me-2">
-                                    ${course.instructor.fullName}
-                                </div>
-                            </td>
-                            <td><span class="badge ${course.active ? 'bg-success' : 'bg-danger'}">${course.active ? 'Active' : 'Inactive'}</span></td>
+                            <td>${course.title || 'No title'}</td>
+                            <td>${course.description ? course.description.substring(0, 50) + (course.description.length > 50 ? '...' : '') : 'No description'}</td>
+                            <td>${instructorName}</td>
                             <td class="action-buttons">
                                 <button class="btn btn-warning btn-sm edit-course-btn" data-id="${course.courseId}">
                                     <i class="fas fa-edit"></i> Edit
@@ -374,41 +429,60 @@
                             </td>
                         </tr>
                     `;
-                    tableBody.append(row);
-                });
+                        tableBody.append(row);
+                    });
+                } else {
+                    tableBody.append(`
+                    <tr>
+                        <td colspan="4" class="text-center">No courses found</td>
+                    </tr>
+                `);
+                }
             },
             error: function(xhr) {
                 console.error("Error loading courses:", xhr);
+                $("#courseTableBody").html(`
+                <tr>
+                    <td colspan="4" class="text-center text-danger">Error loading courses</td>
+                </tr>
+            `);
                 alert("Error loading courses: " + (xhr.responseJSON?.message || "Server error"));
             }
         });
     }
-
-    // Load all instructors
     function loadInstructors() {
+        const role = "INSTRUCTOR"; // or whatever role identifies instructors
+        const url = `http://localhost:3030/api/v1/user/role/${encodeURIComponent(role)}`;
+
         $.ajax({
-            url: "http://localhost:3030/api/v1/user/instructors",
+            url: url,
             type: "GET",
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("authToken")
             },
             success: function(response) {
-                instructors = response.data;
+                console.log("API Response:", response); // Check actual response structure
+
+                // Try these alternatives if response.data is empty:
+                const instructors = response.data || response || [];
                 const instructorSelect = $("#instructor");
-                instructorSelect.empty();
-                instructorSelect.append('<option value="" disabled selected>Select Instructor</option>');
+                instructorSelect.empty().append('<option value="" selected>Select Instructor</option>');
 
                 instructors.forEach(instructor => {
-                    instructorSelect.append(`<option value="${instructor.userId}">${instructor.fullName}</option>`);
+                    instructorSelect.append(
+                        $('<option>').val(instructor.userId || instructor.id).text(instructor.fullName || instructor.name)
+                    );
                 });
             },
             error: function(xhr) {
-                console.error("Error loading instructors:", xhr);
-                alert("Error loading instructors: " + (xhr.responseJSON?.message || "Server error"));
+                console.error("Full error details:", xhr);
+                const errorMsg = xhr.responseJSON?.message ||
+                    xhr.statusText ||
+                    "Unknown error occurred";
+                alert("Failed to load instructors: " + errorMsg);
             }
         });
     }
-
     // Form reset function
     function resetCourseForm() {
         $("#courseForm")[0].reset();
@@ -418,40 +492,57 @@
         $("#saveCourseBtn").show();
         currentCourse = null;
     }
-
-    // Save/Add new course
-    $("#courseForm").submit(function(e) {
+    $("#addCourseForm").submit(function(e) {
         e.preventDefault();
 
-        const selectedInstructorId = $("#instructor").val();
-        const instructor = instructors.find(i => i.userId === selectedInstructorId);
+        const instructorSelect = $("#instructor");
+        const selectedInstructorId = instructorSelect.val();
+        const selectedInstructorName = instructorSelect.find("option:selected").text();
 
-        if (!instructor) {
+        if (!selectedInstructorId) {
             alert("Please select an instructor!");
             return;
         }
 
-        const courseData = {
-            title: $("#title").val(),
-            description: $("#description").val(),
-            instructorId: instructor.userId,
-            instructorName: instructor.fullName
-        };
-
-        const formData = new FormData();
-        formData.append("course", JSON.stringify(courseData));
-
         const courseImage = $("#courseImage")[0].files[0];
-        if (courseImage) {
-            formData.append("courseImage", courseImage);
-        }
+        let imagePath = "/design/images/default-course.png";
 
+        if (courseImage) {
+            const fileName = `course-${Date.now()}-${courseImage.name}`;
+            imagePath = `/design/images/${fileName}`;
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const courseData = {
+                    title: $("#title").val(),
+                    description: $("#description").val(),
+                    instructorId: selectedInstructorId,
+                    instructorName: selectedInstructorName,
+                    imagePath: imagePath
+                };
+                saveCourseData(courseData);
+            };
+
+            reader.readAsDataURL(courseImage);
+        } else {
+            const courseData = {
+                title: $("#title").val(),
+                description: $("#description").val(),
+                instructorId: selectedInstructorId,
+                instructorName: selectedInstructorName,
+                imagePath: imagePath
+            };
+
+            saveCourseData(courseData);
+        }
+    });
+
+    function saveCourseData(courseData) {
         $.ajax({
             type: "POST",
-            url: "http://localhost:3030/api/v1/course/create",
-            data: formData,
-            processData: false,
-            contentType: false,
+            url: "http://localhost:3030/api/v1/courses/create",
+            data: JSON.stringify(courseData),
+            contentType: "application/json",
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("authToken")
             },
@@ -465,7 +556,8 @@
                 alert("Error creating course: " + (xhr.responseJSON?.message || "Server error"));
             }
         });
-    });
+    }
+
 
     // Edit course
     $(document).on("click", ".edit-course-btn", function() {
@@ -536,4 +628,117 @@
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("authToken")
             },
-            success
+            success: function(response) {
+                alert("Course updated successfully!");
+                resetCourseForm();
+                loadCourses();
+            },
+            error: function(xhr) {
+                console.error("Error updating course:", xhr);
+                alert("Error updating course: " + (xhr.responseJSON?.message || "Server error"));
+            }
+        });
+    });
+
+    // Delete course
+    $("#deleteCourseBtn").click(function() {
+        if (!currentCourse) return;
+
+        if (!confirm("Are you sure you want to delete this course?")) {
+            return;
+        }
+
+        $.ajax({
+            type: "DELETE",
+            url: `http://localhost:3030/api/v1/course/delete/${currentCourse.courseId}`,
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function(response) {
+                alert("Course deleted successfully!");
+                resetCourseForm();
+                loadCourses();
+            },
+            error: function(xhr) {
+                console.error("Error deleting course:", xhr);
+                alert("Error deleting course: " + (xhr.responseJSON?.message || "Server error"));
+            }
+        });
+    });
+
+    // Delete course from table
+    $(document).on("click", ".delete-course-btn", function() {
+        const courseId = $(this).data("id");
+
+        if (!confirm("Are you sure you want to delete this course?")) {
+            return;
+        }
+
+        $.ajax({
+            type: "DELETE",
+            url: `http://localhost:3030/api/v1/course/delete/${courseId}`,
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function(response) {
+                alert("Course deleted successfully!");
+                loadCourses();
+            },
+            error: function(xhr) {
+                console.error("Error deleting course:", xhr);
+                alert("Error deleting course: " + (xhr.responseJSON?.message || "Server error"));
+            }
+        });
+    });
+
+    // Toggle course status
+    $(document).on("click", ".toggle-status-btn", function() {
+        const courseId = $(this).data("id");
+        const currentStatus = $(this).data("status");
+        const newStatus = !currentStatus;
+
+        $.ajax({
+            type: "PATCH",
+            url: `http://localhost:3030/api/v1/course/${courseId}/status`,
+            data: JSON.stringify({ active: newStatus }),
+            contentType: "application/json",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function(response) {
+                alert(`Course ${newStatus ? 'activated' : 'deactivated'} successfully!`);
+                loadCourses();
+            },
+            error: function(xhr) {
+                console.error("Error toggling course status:", xhr);
+                alert("Error toggling course status: " + (xhr.responseJSON?.message || "Server error"));
+            }
+        });
+    });
+
+    // Reset form
+    $("#resetCourseBtn").click(function() {
+        resetCourseForm();
+    });
+
+    // Preview course image
+    $("#courseImage").change(function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $("#courseImagePreview img").attr("src", e.target.result);
+                $("#courseImagePreview").show();
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Initialize page
+    $(document).ready(function() {
+        loadCourses();
+        loadInstructors();
+    });
+</script>
+
+</body>

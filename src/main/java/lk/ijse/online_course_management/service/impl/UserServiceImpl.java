@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         if (userDTO.getRole() == null || userDTO.getRole().isEmpty()) {
-            userDTO.setRole("ADMIN");
+            userDTO.setRole("STUDENT");
         } else if (!userDTO.getRole().equalsIgnoreCase("ADMIN")
                 && !userDTO.getRole().equalsIgnoreCase("INSTRUCTOR")
                 && !userDTO.getRole().equalsIgnoreCase("STUDENT")) {
@@ -94,6 +94,24 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return VarList.Not_Found;
     }
 
+    @Override
+    public int resetPassword(UUID userId, String newPassword) {
+        Optional<User> optionalUser = userRepo.findById(userId);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            // Encode the default password
+            String encodedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encodedPassword);
+
+            userRepo.save(user);
+            return VarList.OK;
+        } else {
+            return VarList.Not_Found;
+        }
+    }
+
     private boolean isValidRole(String role) {
         if (role == null) return false;
         String upperRole = role.toUpperCase();
@@ -103,17 +121,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     }
 
-
-    @Override
-    public int resetPassword(String email, String newPassword) {
-        User user = userRepo.findByEmail(email);
-        if (user != null) {
-            user.setPassword(passwordEncoder.encode(newPassword));
-            userRepo.save(user);
-            return VarList.OK;
-        }
-        return VarList.Not_Found;
-    }
 
     @Override
     public UserDTO getUserById(UUID userId) {
@@ -132,13 +139,35 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new IllegalArgumentException("Invalid role specified: " + role);
         }
 
-        return userRepo.findByRole(role.toUpperCase()).stream()
+        return userRepo.findByRole().stream()
                 .map(user -> {
                     UserDTO dto = modelMapper.map(user, UserDTO.class);
                     dto.setPassword(null);
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public int updateUserProfileImage(String email, String newFilename) {
+        User user = userRepo.findByEmail(email);
+        if (user != null) {
+            user.setProfileImage(newFilename);
+            userRepo.save(user);
+            return VarList.OK;
+        }
+        return VarList.Not_Found;
+
+    }
+
+    @Override
+    public int deleteUserByEmail(String email) {
+        User user = userRepo.findByEmail(email);
+        if (user != null) {
+            userRepo.delete(user);
+            return VarList.OK;
+        }
+        return VarList.Not_Found;
     }
 
     @Override
