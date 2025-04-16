@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Submissions | EduNexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .submissions-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .quiz-selector {
+            background: var(--white);
+            border-radius: .5rem;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .submissions-list {
+            background: var(--white);
+            border-radius: .5rem;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .submission-item {
+            padding: 1.5rem;
+            border-bottom: var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .submission-item:last-child {
+            border-bottom: none;
+        }
+
+        .submission-info h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .submission-meta {
+            font-size: 1.4rem;
+            color: var(--light-color);
+        }
+
+        .submission-grade {
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+
+        .grade-form {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .grade-input {
+            width: 80px;
+            padding: 0.5rem;
+            border: var(--border);
+            border-radius: .5rem;
+        }
+
+        .submission-details {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--light-bg);
+            border-radius: .5rem;
+            display: none;
+        }
+
+        .question-review {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: var(--border);
+        }
+
+        .correct-answer {
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .incorrect-answer {
+            color: var(--red);
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+<!-- Header and Sidebar same as instructor dashboard -->
+
+<section class="submissions-container">
+    <h1 class="heading">Review Quiz Submissions</h1>
+
+    <div class="quiz-selector">
+        <div class="form-group">
+            <label for="quizSelect" class="form-label">Select Quiz</label>
+            <select id="quizSelect" class="form-control">
+                <option value="">-- Select Quiz --</option>
+                <option value="1">Midterm Exam - CS101</option>
+                <option value="2">Week 5 Quiz - MATH202</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="submissions-list" id="submissionsList">
+        <div class="submission-item">
+            <div class="submission-info">
+                <h3>John Doe</h3>
+                <div class="submission-meta">
+                    Submitted: May 15, 2023 10:30 AM | Time taken: 22:15
+                </div>
+            </div>
+            <div class="submission-grade">
+                <span class="correct-answer">8/10</span>
+            </div>
+            <button class="btn btn-primary" onclick="showSubmissionDetails(1)">
+                <i class="fas fa-eye"></i> Review
+            </button>
+        </div>
+
+        <div class="submission-item">
+            <div class="submission-info">
+                <h3>Jane Smith</h3>
+                <div class="submission-meta">
+                    Submitted: May 15, 2023 11:45 AM | Time taken: 28:30
+                </div>
+            </div>
+            <div class="grade-form">
+                <input type="number" class="grade-input" min="0" max="10" value="7">
+                <span>/ 10</span>
+                <button class="btn btn-success">
+                    <i class="fas fa-check"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="submission-details" id="submissionDetails">
+        <h2>Submission Details</h2>
+        <div class="question-review">
+            <h3>Question 1: What is the output of console.log(2 + '2')?</h3>
+            <p><strong>Correct Answer:</strong> <span class="correct-answer">"22"</span></p>
+            <p><strong>Student Answer:</strong> <span class="correct-answer">"22"</span></p>
+            <p><strong>Points:</strong> 1/1</p>
+        </div>
+
+        <div class="question-review">
+            <h3>Question 2: Which of the following is NOT a JavaScript data type?</h3>
+            <p><strong>Correct Answer:</strong> <span class="correct-answer">Float</span></p>
+            <p><strong>Student Answer:</strong> <span class="incorrect-answer">Symbol</span></p>
+            <p><strong>Points:</strong> 0/1</p>
+            <div class="form-group">
+                <label class="form-label">Adjust Points (optional)</label>
+                <input type="number" class="form-control" min="0" max="1" value="0" style="width: 80px;">
+            </div>
+        </div>
+
+        <button class="btn btn-primary">
+            <i class="fas fa-save"></i> Save All Changes
+        </button>
+    </div>
+</section>
+
+<script>
+    function showSubmissionDetails(submissionId) {
+        document.getElementById('submissionDetails').style.display = 'block';
+        // In a real app, you would fetch submission details from the server
+    }
+
+    document.getElementById('quizSelect').addEventListener('change', function() {
+        const quizId = this.value;
+        if (quizId) {
+            // In a real app, you would fetch submissions for this quiz from the server
+            console.log(`Loading submissions for quiz ${quizId}`);
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Admin Dashboard</title>-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">-->
+<!--  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--  <style>-->
+<!--    :root {-->
+<!--      &#45;&#45;main-color: #9b2ed5;-->
+<!--      &#45;&#45;light-color: #504d51;-->
+<!--      &#45;&#45;dark-color: #4a1a6b;-->
+<!--    }-->
+<!--    .admin-nav {-->
+<!--      background-color: var(&#45;&#45;dark-color);-->
+<!--    }-->
+<!--    .admin-nav .nav-link {-->
+<!--      color: #000000;-->
+<!--    }-->
+<!--    .admin-nav .nav-link.active {-->
+<!--      background-color: var(&#45;&#45;main-color);-->
+<!--    }-->
+<!--    .stat-card {-->
+<!--      border-left: 4px solid var(&#45;&#45;main-color);-->
+<!--    }-->
+<!--    .btn-main {-->
+<!--      background-color: var(&#45;&#45;main-color);-->
+<!--      color: #adedd4;-->
+<!--    }-->
+<!--    .btn-main:hover {-->
+<!--      background-color: var(&#45;&#45;dark-color);-->
+<!--      color: white;-->
+<!--    }-->
+<!--    .table-actions a {-->
+<!--      margin-right: 5px;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container-fluid">-->
+<!--  <div class="row">-->
+<!--    &lt;!&ndash; Sidebar Navigation &ndash;&gt;-->
+<!--    <div class="col-md-2 px-0">-->
+<!--      <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark admin-nav" style="height: 100vh;">-->
+<!--        <a href="admin-dashboard.html" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">-->
+<!--          <img src="../images/logo.png" width="40" height="40" class="me-2">-->
+<!--          <span class="fs-4">EduNexus Admin</span>-->
+<!--        </a>-->
+<!--        <hr>-->
+<!--        <ul class="nav nav-pills flex-column mb-auto">-->
+<!--          <li class="nav-item">-->
+<!--            <a href="admin-dashboard.html" class="nav-link active">-->
+<!--              <i class="fas fa-tachometer-alt me-2"></i>-->
+<!--              Dashboard-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <a href="user-management.html" class="nav-link text-white">-->
+<!--              <i class="fas fa-users me-2"></i>-->
+<!--              User Management-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <a href="course-management.html" class="nav-link text-white">-->
+<!--              <i class="fas fa-graduation-cap me-2"></i>-->
+<!--              Course Management-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <a href="enrollment-management.html" class="nav-link text-white">-->
+<!--              <i class="fas fa-tasks me-2"></i>-->
+<!--              Enrollments-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <a href="system-settings.html" class="nav-link text-white">-->
+<!--              <i class="fas fa-cog me-2"></i>-->
+<!--              System Settings-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--        <hr>-->
+<!--        <div class="dropdown">-->
+<!--          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            <img src="../images/admin-avatar.png" alt="Admin" width="32" height="32" class="rounded-circle me-2">-->
+<!--            <strong>Admin</strong>-->
+<!--          </a>-->
+<!--          <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">-->
+<!--            <li><a class="dropdown-item" href="admin-profile.html">Profile</a></li>-->
+<!--            <li><hr class="dropdown-divider"></li>-->
+<!--            <li><a class="dropdown-item" href="../logout.html">Sign out</a></li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Main Content &ndash;&gt;-->
+<!--    <div class="col-md-10 p-4">-->
+<!--      <h2 class="mb-4">Admin Dashboard</h2>-->
+
+<!--      &lt;!&ndash; Stats Cards &ndash;&gt;-->
+<!--      <div class="row mb-4">-->
+<!--        <div class="col-md-3">-->
+<!--          <div class="card stat-card">-->
+<!--            <div class="card-body">-->
+<!--              <h5 class="card-title">1,245</h5>-->
+<!--              <p class="card-text">Total Students</p>-->
+<!--              <a href="user-management.html?role=student" class="btn btn-sm btn-main">View All</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--          <div class="card stat-card">-->
+<!--            <div class="card-body">-->
+<!--              <h5 class="card-title">56</h5>-->
+<!--              <p class="card-text">Total Instructors</p>-->
+<!--              <a href="user-management.html?role=instructor" class="btn btn-sm btn-main">View All</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--          <div class="card stat-card">-->
+<!--            <div class="card-body">-->
+<!--              <h5 class="card-title">32</h5>-->
+<!--              <p class="card-text">Active Courses</p>-->
+<!--              <a href="course-management.html" class="btn btn-sm btn-main">View All</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--          <div class="card stat-card">-->
+<!--            <div class="card-body">-->
+<!--              <h5 class="card-title">85%</h5>-->
+<!--              <p class="card-text">System Health</p>-->
+<!--              <a href="system-settings.html" class="btn btn-sm btn-main">Details</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Quick Actions &ndash;&gt;-->
+<!--      <div class="row mb-4">-->
+<!--        <div class="col-12">-->
+<!--          <div class="card">-->
+<!--            <div class="card-header bg-main text-white">-->
+<!--              <h5 class="mb-0">Quick Actions</h5>-->
+<!--            </div>-->
+<!--            <div class="card-body">-->
+<!--              <div class="d-flex flex-wrap gap-3">-->
+<!--                <a href="user-management.html?action=create" class="btn btn-main">-->
+<!--                  <i class="fas fa-user-plus me-2"></i> Add New User-->
+<!--                </a>-->
+<!--                <a href="course-management.html?action=create" class="btn btn-main">-->
+<!--                  <i class="fas fa-book me-2"></i> Create Course-->
+<!--                </a>-->
+<!--                <a href="enrollment-management.html" class="btn btn-main">-->
+<!--                  <i class="fas fa-user-graduate me-2"></i> Manage Enrollments-->
+<!--                </a>-->
+<!--                <a href="system-reports.html" class="btn btn-main">-->
+<!--                  <i class="fas fa-chart-bar me-2"></i> View Reports-->
+<!--                </a>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Recent Activity &ndash;&gt;-->
+<!--      <div class="row">-->
+<!--        <div class="col-md-6">-->
+<!--          <div class="card">-->
+<!--            <div class="card-header bg-main text-white">-->
+<!--              <h5 class="mb-0">Recent Users</h5>-->
+<!--            </div>-->
+<!--            <div class="card-body">-->
+<!--              <div class="table-responsive">-->
+<!--                <table class="table table-hover">-->
+<!--                  <thead>-->
+<!--                  <tr>-->
+<!--                    <th>Name</th>-->
+<!--                    <th>Role</th>-->
+<!--                    <th>Joined</th>-->
+<!--                    <th>Actions</th>-->
+<!--                  </tr>-->
+<!--                  </thead>-->
+<!--                  <tbody>-->
+<!--                  <tr>-->
+<!--                    <td>John Smith</td>-->
+<!--                    <td><span class="badge bg-success">Student</span></td>-->
+<!--                    <td>Today</td>-->
+<!--                    <td class="table-actions">-->
+<!--                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>-->
+<!--                      <a href="#" class="text-warning"><i class="fas fa-edit"></i></a>-->
+<!--                      <a href="#" class="text-danger"><i class="fas fa-trash"></i></a>-->
+<!--                    </td>-->
+<!--                  </tr>-->
+<!--                  <tr>-->
+<!--                    <td>Sarah Johnson</td>-->
+<!--                    <td><span class="badge bg-info">Instructor</span></td>-->
+<!--                    <td>2 days ago</td>-->
+<!--                    <td class="table-actions">-->
+<!--                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>-->
+<!--                      <a href="#" class="text-warning"><i class="fas fa-edit"></i></a>-->
+<!--                      <a href="#" class="text-danger"><i class="fas fa-trash"></i></a>-->
+<!--                    </td>-->
+<!--                  </tr>-->
+<!--                  </tbody>-->
+<!--                </table>-->
+<!--              </div>-->
+<!--              <a href="user-management.html" class="btn btn-sm btn-main mt-2">View All Users</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-6">-->
+<!--          <div class="card">-->
+<!--            <div class="card-header bg-main text-white">-->
+<!--              <h5 class="mb-0">Recent Courses</h5>-->
+<!--            </div>-->
+<!--            <div class="card-body">-->
+<!--              <div class="table-responsive">-->
+<!--                <table class="table table-hover">-->
+<!--                  <thead>-->
+<!--                  <tr>-->
+<!--                    <th>Title</th>-->
+<!--                    <th>Instructor</th>-->
+<!--                    <th>Created</th>-->
+<!--                    <th>Actions</th>-->
+<!--                  </tr>-->
+<!--                  </thead>-->
+<!--                  <tbody>-->
+<!--                  <tr>-->
+<!--                    <td>Advanced React</td>-->
+<!--                    <td>Sarah Johnson</td>-->
+<!--                    <td>Yesterday</td>-->
+<!--                    <td class="table-actions">-->
+<!--                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>-->
+<!--                      <a href="#" class="text-warning"><i class="fas fa-edit"></i></a>-->
+<!--                      <a href="#" class="text-danger"><i class="fas fa-trash"></i></a>-->
+<!--                    </td>-->
+<!--                  </tr>-->
+<!--                  <tr>-->
+<!--                    <td>Python Fundamentals</td>-->
+<!--                    <td>Michael Brown</td>-->
+<!--                    <td>3 days ago</td>-->
+<!--                    <td class="table-actions">-->
+<!--                      <a href="#" class="text-primary"><i class="fas fa-eye"></i></a>-->
+<!--                      <a href="#" class="text-warning"><i class="fas fa-edit"></i></a>-->
+<!--                      <a href="#" class="text-danger"><i class="fas fa-trash"></i></a>-->
+<!--                    </td>-->
+<!--                  </tr>-->
+<!--                  </tbody>-->
+<!--                </table>-->
+<!--              </div>-->
+<!--              <a href="course-management.html" class="btn btn-sm btn-main mt-2">View All Courses</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+<!--<script>-->
+<!--  // System health chart-->
+<!--  const ctx = document.createElement('canvas');-->
+<!--  ctx.id = 'systemHealthChart';-->
+<!--  document.querySelector('.stat-card:last-child .card-body').appendChild(ctx);-->
+
+<!--  new Chart(ctx, {-->
+<!--    type: 'doughnut',-->
+<!--    data: {-->
+<!--      labels: ['Healthy', 'Issues'],-->
+<!--      datasets: [{-->
+<!--        data: [85, 15],-->
+<!--        backgroundColor: ['#4caf50', '#f44336'],-->
+<!--        borderWidth: 0-->
+<!--      }]-->
+<!--    },-->
+<!--    options: {-->
+<!--      cutout: '70%',-->
+<!--      plugins: {-->
+<!--        legend: {-->
+<!--          display: false-->
+<!--        }-->
+<!--      }-->
+<!--    }-->
+<!--  });-->
+
+<!--  // Fetch real data from API-->
+<!--  async function fetchDashboardData() {-->
+<!--    try {-->
+<!--      const response = await fetch('/api/admin/dashboard');-->
+<!--      const data = await response.json();-->
+
+<!--      // Update the UI with real data-->
+<!--      document.querySelector('.stat-card:nth-child(1) h5').textContent = data.totalStudents;-->
+<!--      document.querySelector('.stat-card:nth-child(2) h5').textContent = data.totalInstructors;-->
+<!--      document.querySelector('.stat-card:nth-child(3) h5').textContent = data.activeCourses;-->
+
+<!--      // Update recent users and courses tables-->
+<!--      // This would be more complex in a real implementation-->
+<!--    } catch (error) {-->
+<!--      console.error('Error fetching dashboard data:', error);-->
+<!--    }-->
+<!--  }-->
+
+<!--  // Call the function when page loads-->
+<!--  document.addEventListener('DOMContentLoaded', fetchDashboardData);-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

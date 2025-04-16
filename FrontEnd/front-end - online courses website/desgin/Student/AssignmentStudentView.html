@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Assignment</title>
+
+  <!-- font awesome cdn link  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+  <!-- custom css file link  -->
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    /* Assignment Submission Specific Styles */
+    .assignment-submission {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: .5rem;
+      box-shadow: var(--box-shadow);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.5rem 2rem;
+      background: var(--main-color);
+      color: white;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    .assignment-info {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: var(--light-bg);
+      border-radius: .5rem;
+      border-left: 4px solid var(--main-color);
+    }
+
+    .assignment-info h3 {
+      margin-top: 0;
+      color: var(--main-color);
+    }
+
+    .assignment-info p {
+      margin: 0.5rem 0;
+      font-size: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.6rem;
+      border: var(--border);
+      border-radius: .5rem;
+      background: var(--light-bg);
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.6rem;
+      color: var(--black);
+    }
+
+    .text-danger {
+      color: var(--red);
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: .5rem;
+      font-size: 1.6rem;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--main-color);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: var(--light-color);
+      color: white;
+    }
+
+    .file-preview {
+      max-width: 100px;
+      max-height: 100px;
+      border-radius: .5rem;
+      border: var(--border);
+      display: none;
+    }
+
+    .submission-status {
+      padding: 1rem;
+      border-radius: .5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .submitted {
+      background-color: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+    }
+
+    .not-submitted {
+      background-color: rgba(220, 53, 69, 0.2);
+      color: #dc3545;
+    }
+
+    .submission-details {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: var(--light-bg);
+      border-radius: .5rem;
+      display: none;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <section class="flex">
+    <a href="../Student/studentDashboard.html" class="logo">
+      <img src="../images/logo.png" class="image" alt="">
+      <b id="logoN" style="color: #9b2ed5">EduNexus</b>
+    </a>
+
+    <form action="../search.html" method="post" class="search-form">
+      <input type="text" name="search_box" required placeholder="search assignments..." maxlength="100">
+      <button type="submit" class="fas fa-search"></button>
+    </form>
+
+    <div class="icons">
+      <div id="menu-btn" class="fas fa-bars"></div>
+      <div id="search-btn" class="fas fa-search"></div>
+      <div id="user-btn" class="fas fa-user"></div>
+      <div id="toggle-btn" class="fas fa-sun"></div>
+    </div>
+
+    <div class="profile">
+      <img src="../images/User.png" width="80" height="80" class="image" alt="">
+      <p class="role">Student</p>
+      <a href="../profile.html" class="btn">view profile</a>
+    </div>
+  </section>
+</header>
+
+<div class="side-bar">
+  <div id="close-btn">
+    <i class="fas fa-times"></i>
+  </div>
+
+  <div class="profile">
+    <img src="../images/User.png" class="image" alt="">
+    <p class="role">Student</p>
+    <a href="../profile.html" class="btn">view profile</a>
+  </div>
+
+  <nav class="navbar">
+    <a href="../Student/studentDashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+    <a href="assignments.html"><i class="fas fa-tasks"></i><span>Assignments</span></a>
+    <a href="submit-assignment.html" class="active"><i class="fas fa-file-upload"></i><span>Submit Assignment</span></a>
+    <a href="submission-status.html"><i class="fas fa-history"></i><span>Submission Status</span></a>
+    <a href="grades.html"><i class="fas fa-graduation-cap"></i><span>Grades</span></a>
+    <a href="../index.html" class="logout-btn">
+      <i class="fas fa-sign-out-alt"></i>
+      <span class="logout-text">Logout</span>
+    </a>
+  </nav>
+</div>
+
+<section class="assignment-submission">
+  <!-- Assignment Information -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-tasks"></i> Assignment Submission
+    </div>
+    <div class="card-body">
+      <!-- Assignment Details -->
+      <div class="assignment-info">
+        <h3 id="assignmentTitle">Programming Project 1</h3>
+        <p><strong>Course:</strong> <span id="courseCode">CS101 - Introduction to Programming</span></p>
+        <p><strong>Instructor:</strong> <span id="instructorName">Dr. Smith</span></p>
+        <p><strong>Due Date:</strong> <span id="dueDate">May 15, 2023, 11:59 PM</span></p>
+        <p><strong>Points:</strong> <span id="assignmentPoints">100</span></p>
+        <p><strong>Description:</strong> <span id="assignmentDescription">Create a Java program that demonstrates object-oriented programming principles including inheritance, polymorphism, and encapsulation.</span></p>
+        <p><strong>Original Assignment File:</strong>
+          <a href="#" id="assignmentFileLink" class="btn btn-sm btn-primary">
+            <i class="fas fa-download"></i> Download
+          </a>
+        </p>
+      </div>
+
+      <!-- Submission Status -->
+      <div id="submissionStatus" class="submission-status not-submitted">
+        <i class="fas fa-exclamation-circle"></i> Not Submitted
+      </div>
+
+      <!-- Submission Form -->
+      <form id="submissionForm">
+        <div class="form-group">
+          <label for="submissionNotes" class="form-label">Submission Notes</label>
+          <textarea class="form-control" id="submissionNotes" rows="3" placeholder="Enter any additional notes about your submission"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="submissionFile" class="form-label">Submission File <span class="text-danger">*</span></label>
+          <input type="file" class="form-control" id="submissionFile" accept=".pdf,.doc,.docx,.txt,.zip,.java,.py,.cpp" required>
+          <small class="text-muted">Supported formats: PDF, DOC, TXT, ZIP, Java, Python, C++</small>
+          <div class="mt-2">
+            <img id="filePreview" class="file-preview" alt="File Preview">
+          </div>
+        </div>
+
+        <!-- Hidden fields -->
+        <input type="hidden" id="assignmentId" value="123">
+        <input type="hidden" id="submissionId" value="">
+        <input type="hidden" id="submissionTime">
+
+        <!-- Action Buttons -->
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" id="resetSubmissionBtn">
+            <i class="fas fa-undo"></i> Reset
+          </button>
+          <button type="submit" class="btn btn-primary" id="submitAssignmentBtn">
+            <i class="fas fa-paper-plane"></i> Submit Assignment
+          </button>
+        </div>
+      </form>
+
+      <!-- Submission Details (shown after submission) -->
+      <div id="submissionDetails" class="submission-details">
+        <h4><i class="fas fa-check-circle"></i> Submission Details</h4>
+        <p><strong>Submitted on:</strong> <span id="submittedOn">May 14, 2023, 3:45 PM</span></p>
+        <p><strong>Submission File:</strong> <a href="#" id="submittedFileLink">project1.zip</a></p>
+        <p><strong>Submission Notes:</strong> <span id="submittedNotes">I've included all required files and a README with instructions.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  &copy; copyright @ 2025 by <span>EduNexus</span> | all rights reserved!
+</footer>
+
+<!-- jQuery -->
+<script src="../js/jquery.js"></script>
+<!-- Custom JS -->
+<script src="../js/script.js"></script>
+
+<script>
+  // Global variables
+  let currentAssignment = null;
+  let currentSubmission = null;
+
+  // Load assignment and submission data
+  function loadAssignmentData() {
+    // Get assignment ID from URL or other source
+    const assignmentId = getAssignmentIdFromUrl();
+
+    // Fetch assignment details
+    $.ajax({
+      url: `http://localhost:3030/api/v1/assignment/${assignmentId}`,
+      type: "GET",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("authToken")
+      },
+      success: function(assignmentResponse) {
+        currentAssignment = assignmentResponse.data;
+        displayAssignmentDetails(currentAssignment);
+
+        // Check if submission exists
+        checkForExistingSubmission(assignmentId);
+      },
+      error: function(xhr) {
+        console.error("Error loading assignment:", xhr);
+        alert("Error loading assignment: " + (xhr.responseJSON?.message || "Server error"));
+      }
+    });
+  }
+
+  // Get assignment ID from URL
+  function getAssignmentIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id') || "123"; // Default for demo
+  }
+
+  // Display assignment details
+  function displayAssignmentDetails(assignment) {
+    $("#assignmentTitle").text(assignment.title);
+    $("#courseCode").text(`${assignment.courseCode} - ${assignment.courseName}`);
+    $("#instructorName").text(assignment.instructorName);
+
+    // Format due date
+    const dueDate = new Date(assignment.dueDate);
+    $("#dueDate").text(dueDate.toLocaleString());
+
+    $("#assignmentPoints").text(assignment.points);
+    $("#assignmentDescription").text(assignment.description);
+
+    if (assignment.fileUrl) {
+      $("#assignmentFileLink").attr("href", assignment.fileUrl);
+    } else {
+      $("#assignmentFileLink").parent().hide();
+    }
+
+    $("#assignmentId").val(assignment.assignmentId);
+  }
+
+  // Check for existing submission
+  function checkForExistingSubmission(assignmentId) {
+    $.ajax({
+      url: `http://localhost:3030/api/v1/submission?assignmentId=${assignmentId}`,
+      type: "GET",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("authToken")
+      },
+      success: function(submissionResponse) {
+        if (submissionResponse.data && submissionResponse.data.length > 0) {
+          currentSubmission = submissionResponse.data[0];
+          displaySubmissionDetails(currentSubmission);
+        }
+      },
+      error: function(xhr) {
+        console.error("Error checking submission:", xhr);
+      }
+    });
+  }
+
+  // Display submission details
+  function displaySubmissionDetails(submission) {
+    $("#submissionStatus").removeClass("not-submitted").addClass("submitted")
+            .html('<i class="fas fa-check-circle"></i> Submitted');
+
+    // Format submission date
+    const submittedDate = new Date(submission.submissionTime);
+    $("#submittedOn").text(submittedDate.toLocaleString());
+
+    $("#submittedFileLink").attr("href", submission.fileUrl).text(submission.fileName);
+    $("#submittedNotes").text(submission.notes || "No notes provided");
+
+    // Fill hidden fields
+    $("#submissionId").val(submission.submissionId);
+    $("#submissionTime").val(submission.submissionTime);
+
+    // Show submission details
+    $("#submissionDetails").show();
+
+    // Disable form if submission is past due
+    const dueDate = new Date(currentAssignment.dueDate);
+    const now = new Date();
+    if (now > dueDate) {
+      $("#submissionForm :input").prop("disabled", true);
+      $("#submitAssignmentBtn").hide();
+      $("#submissionStatus").append(' <span class="text-danger">(Late submissions not allowed)</span>');
+    }
+  }
+
+  // Handle form submission
+  $("#submissionForm").submit(function(e) {
+    e.preventDefault();
+
+    // Validate file
+    const fileInput = $("#submissionFile")[0];
+    if (!fileInput.files || fileInput.files.length === 0) {
+      alert("Please select a file to upload");
+      return;
+    }
+
+    // Create FormData object
+    const formData = new FormData();
+    formData.append("assignmentId", $("#assignmentId").val());
+    formData.append("notes", $("#submissionNotes").val());
+    formData.append("file", fileInput.files[0]);
+
+    // Generate submission timestamp (server will also set this)
+    const submissionTime = new Date().toISOString();
+    formData.append("submissionTime", submissionTime);
+
+    // Determine if this is a new submission or an update
+    const submissionId = $("#submissionId").val();
+    const method = submissionId ? "PUT" : "POST";
+    const url = submissionId
+            ? `http://localhost:3030/api/v1/submission/update/${submissionId}`
+            : "http://localhost:3030/api/v1/submission/create";
+
+    $.ajax({
+      url: url,
+      type: method,
+      data: formData,
+      processData: false,
+      contentType: false,
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("authToken")
+      },
+      success: function(response) {
+        alert("Assignment submitted successfully!");
+        currentSubmission = response.data;
+        displaySubmissionDetails(currentSubmission);
+      },
+      error: function(xhr) {
+        console.error("Error submitting assignment:", xhr);
+        alert("Error submitting assignment: " + (xhr.responseJSON?.message || "Server error"));
+      }
+    });
+  });
+
+  // Preview file selection
+  $("#submissionFile").change(function(event) {
+    const file = event.target.files[0];
+    const preview = $("#filePreview");
+
+    if (file) {
+      // Show generic file icon for all file types
+      preview.attr("src", "../images/file-icon.png");
+      preview.show();
+    } else {
+      preview.hide();
+    }
+  });
+
+  // Reset form button
+  $("#resetSubmissionBtn").click(function() {
+    $("#submissionForm")[0].reset();
+    $("#filePreview").hide();
+  });
+
+  // Initialize on page load
+  $(document).ready(function() {
+    loadAssignmentData();
+  });
+</script>
+</body>
+</html>

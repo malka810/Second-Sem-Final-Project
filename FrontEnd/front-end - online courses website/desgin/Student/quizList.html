@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Quiz | EduNexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .quiz-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .quiz-info {
+            background: var(--white);
+            border-radius: .5rem;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .quiz-info h1 {
+            color: var(--main-color);
+            margin-bottom: 1rem;
+        }
+
+        .quiz-info p {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--main-color);
+            margin: 1rem 0;
+        }
+
+        .start-btn {
+            padding: 1rem 3rem;
+            font-size: 1.8rem;
+            margin-top: 2rem;
+        }
+
+        .quiz-questions {
+            display: none;
+        }
+
+        .question-card {
+            background: var(--white);
+            border-radius: .5rem;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .options-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .option {
+            display: block;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--light-color);
+            border-radius: .5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            background: var(--light-bg);
+        }
+
+        .option.selected {
+            background: var(--main-color);
+            color: white;
+            border-color: var(--main-color);
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: var(--light-bg);
+            border-radius: 5px;
+            margin-bottom: 2rem;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--main-color);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .question-number {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            color: var(--light-color);
+        }
+    </style>
+</head>
+<body>
+<!-- Header and Sidebar same as student dashboard -->
+
+<section class="quiz-container">
+    <!-- Quiz Instructions Screen -->
+    <div class="quiz-info" id="quizInstructions">
+        <h1>Midterm Exam</h1>
+        <p>CS101 - Introduction to Programming</p>
+        <p>This quiz contains 5 questions with a time limit of 30 minutes.</p>
+        <p>Please read each question carefully before answering.</p>
+        <p>You can navigate between questions using the Previous and Next buttons.</p>
+        <div class="timer">Time: 30:00</div>
+        <button class="btn btn-primary start-btn" id="startQuizBtn">Start Quiz</button>
+    </div>
+
+    <!-- Quiz Questions Screen -->
+    <div class="quiz-questions" id="quizQuestions">
+        <div class="progress-bar">
+            <div class="progress" id="quizProgress"></div>
+        </div>
+
+        <div class="question-number">
+            Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">5</span>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text" id="questionText">
+                What is the output of the following code snippet?
+                <pre>console.log(2 + '2');</pre>
+            </div>
+
+            <div class="options-container" id="optionsContainer">
+                <div class="option" onclick="selectOption(this)">4</div>
+                <div class="option" onclick="selectOption(this)">22</div>
+                <div class="option" onclick="selectOption(this)">NaN</div>
+                <div class="option" onclick="selectOption(this)">TypeError</div>
+            </div>
+
+            <div class="quiz-navigation">
+                <button class="btn btn-secondary" id="prevQuestionBtn" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button class="btn btn-primary" id="nextQuestionBtn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="btn btn-success" id="submitQuizBtn" style="display: none;">
+                    <i class="fas fa-paper-plane"></i> Submit Quiz
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Quiz questions data
+    const quizQuestions = [
+        {
+            id: 1,
+            text: "What is the output of the following code snippet?\nconsole.log(2 + '2');",
+            type: "multiple_choice",
+            options: ["4", "22", "NaN", "TypeError"],
+            correctAnswer: 1
+        },
+        {
+            id: 2,
+            text: "Which of the following is NOT a JavaScript data type?",
+            type: "multiple_choice",
+            options: ["String", "Boolean", "Float", "Symbol"],
+            correctAnswer: 2
+        },
+        // More questions...
+    ];
+
+    let currentQuestionIndex = 0;
+    let userAnswers = {};
+    let timeLeft = 30 * 60; // 30 minutes in seconds
+    let timerInterval;
+
+    document.getElementById('startQuizBtn').addEventListener('click', function() {
+        document.getElementById('quizInstructions').style.display = 'none';
+        document.getElementById('quizQuestions').style.display = 'block';
+        startTimer();
+        loadQuestion(currentQuestionIndex);
+    });
+
+    function startTimer() {
+        timerInterval = setInterval(function() {
+            timeLeft--;
+            updateTimerDisplay();
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.querySelector('.timer').textContent =
+            `Time: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function loadQuestion(index) {
+        const question = quizQuestions[index];
+        document.getElementById('questionText').textContent = question.text;
+
+        const optionsContainer = document.getElementById('optionsContainer');
+        optionsContainer.innerHTML = '';
+
+        question.options.forEach((option, i) => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option';
+            if (userAnswers[question.id] === i) {
+                optionElement.classList.add('selected');
+            }
+            optionElement.textContent = option;
+            optionElement.onclick = function() { selectOption(this, i); };
+            optionsContainer.appendChild(optionElement);
+        });
+
+        // Update progress
+        const progress = ((index + 1) / quizQuestions.length) * 100;
+        document.getElementById('quizProgress').style.width = `${progress}%`;
+
+        // Update question numbers
+        document.getElementById('currentQuestionNum').textContent = index + 1;
+        document.getElementById('totalQuestions').textContent = quizQuestions.length;
+
+        // Update navigation buttons
+        document.getElementById('prevQuestionBtn').disabled = index === 0;
+        document.getElementById('nextQuestionBtn').style.display =
+            index === quizQuestions.length - 1 ? 'none' : 'inline-block';
+        document.getElementById('submitQuizBtn').style.display =
+            index === quizQuestions.length - 1 ? 'inline-block' : 'none';
+    }
+
+    function selectOption(element, optionIndex) {
+        const options = document.querySelectorAll('.option');
+        options.forEach(opt => opt.classList.remove('selected'));
+        element.classList.add('selected');
+
+        // Save answer
+        const currentQuestion = quizQuestions[currentQuestionIndex];
+        userAnswers[currentQuestion.id] = optionIndex;
+    }
+
+    document.getElementById('prevQuestionBtn').addEventListener('click', function() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            loadQuestion(currentQuestionIndex);
+        }
+    });
+
+    document.getElementById('nextQuestionBtn').addEventListener('click', function() {
+        if (currentQuestionIndex < quizQuestions.length - 1) {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+        }
+    });
+
+    document.getElementById('submitQuizBtn').addEventListener('click', submitQuiz);
+
+    function submitQuiz() {
+        clearInterval(timerInterval);
+
+        // Calculate score
+        let score = 0;
+        quizQuestions.forEach(question => {
+            if (userAnswers[question.id] === question.correctAnswer) {
+                score++;
+            }
+        });
+
+        // Show results
+        alert(`Quiz submitted!\nYour score: ${score}/${quizQuestions.length}`);
+
+        // In a real app, you would send the answers to the server here
+    }
+</script>
+</body>
+</html>

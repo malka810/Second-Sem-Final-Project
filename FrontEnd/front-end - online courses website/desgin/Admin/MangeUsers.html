@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        /* User Management Specific Styles */
+        .user-management {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: .5rem;+
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.5rem 2rem;
+            background: var(--main-color);
+            color: white;
+            font-size: 1.7rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.4rem;
+            border: var(--border);
+            border-radius: .5rem;
+            margin-bottom: 1.5rem;
+            background: var(--light-bg);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            color: var(--black);
+        }
+
+        .text-danger {
+            color: var(--red);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 1rem 1.5rem;
+            border-radius: .5rem;
+            font-size: 1.6rem;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary {
+            background: var(--light-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--orange);
+            color: white;
+        }
+
+        .btn-success {
+            background: #c654ff;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 1.4rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 1.2rem;
+            text-align: left;
+            border-bottom: var(--border);
+            font-size: 1.5rem;
+        }
+
+        .table th {
+            background: var(--light-bg);
+            font-weight: 600;
+        }
+
+        .table tr:hover {
+            background: rgba(155, 46, 213, 0.05);
+        }
+
+        .img-thumbnail {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: var(--border);
+        }
+
+        #imagePreviewContainer {
+            margin: 1rem 0;
+            display: none;
+        }
+
+        #imagePreview {
+            max-width: 100px;
+            border-radius: 50%;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <section class="flex">
+        <a href="../admin-dashboard.html" class="logo">
+            <img src="../images/logo.png" class="image" alt="">
+            <b id="logoN" style="color: #9b2ed5">EduNexus</b>
+        </a>
+
+        <form action="../search.html" method="post" class="search-form">
+            <input type="text" name="search_box" required placeholder="search users..." maxlength="100">
+            <button type="submit" class="fas fa-search"></button>
+        </form>
+
+        <div class="icons">
+            <div id="menu-btn" class="fas fa-bars"></div>
+            <div id="search-btn" class="fas fa-search"></div>
+            <div id="user-btn" class="fas fa-user"></div>
+            <div id="toggle-btn" class="fas fa-sun"></div>
+        </div>
+
+        <div class="profile">
+            <img src="../images/User.png" width="80" height="80" class="image" alt="">
+            <p class="role">Admin</p>
+            <a href="../profile.html" class="btn">view profile</a>
+        </div>
+    </section>
+</header>
+
+<div class="side-bar">
+    <div id="close-btn">
+        <i class="fas fa-times"></i>
+    </div>
+
+    <div class="profile">
+        <img src="../images/User.png" class="image" alt="">
+        <p class="role">Admin</p>
+        <a href="../profile.html" class="btn">view profile</a>
+    </div>
+
+    <nav class="navbar">
+        <a href="../admin-dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+        <a href="MangeUsers.html" class="active"><i class="fas fa-users"></i><span>User Management</span></a>
+        <a href="view-user.html"><i class="fas fa-user-plus"></i><span>View User</span></a>
+<!--        <a href="user-roles.html"><i class="fas fa-user-tag"></i><span>User Roles</span></a>-->
+<!--        <a href="user-activity.html"><i class="fas fa-chart-line"></i><span>User Activity</span></a>-->
+        <a href="../index.html" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="logout-text">Logout</span>
+        </a>
+    </nav>
+</div>
+
+<section class="user-management">
+    <!-- User Form -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-user-edit"></i> User Information
+        </div>
+        <div class="card-body">
+            <form id="addUser">
+                <!-- Full Name Field -->
+                <div class="form-group">
+                    <label for="fullName" class="form-label">Full Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="fullName" placeholder="Enter full name" required>
+                </div>
+
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+                </div>
+
+                <!-- Role Selection -->
+                <div class="form-group">
+                    <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
+                    <select class="form-control" id="role" required>
+                        <option value="" disabled selected>Select Role</option>
+                        <option value="ADMIN">Admin</option>
+                        <option value="INSTRUCTOR">Instructor</option>
+                        <option value="STUDENT">Student</option>
+                    </select>
+                </div>
+
+                <!-- Profile Image Upload -->
+                <div class="form-group">
+                    <label for="profileImage" class="form-label">Profile Image</label>
+                    <input type="file" class="form-control" id="profileImage" accept="image/*" onchange="previewImage(event)">
+                    <div id="imagePreviewContainer" class="text-center mt-2">
+                        <img id="imagePreview" src="" alt="Profile Image Preview" class="img-thumbnail">
+                    </div>
+                </div>
+
+                <!-- Hidden field for user ID -->
+                <input type="hidden" id="userId">
+
+                <!-- Action Buttons -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" id="resetBtn">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                    <button type="button" class="btn btn-danger" id="deleteBtn" style="display: none;" disabled>
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                    <button type="button" class="btn btn-warning" id="updateBtn" style="display: none;" disabled>
+                        <i class="fas fa-pencil-alt"></i> Update
+                    </button>
+                    <button type="submit" class="btn btn-success" id="saveBtn">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</section>
+
+<footer class="footer">
+    &copy; copyright @ 2025 by <span>EduNexus</span> | all rights reserved!
+</footer>
+
+<!-- jQuery -->
+<script src="../js/jquery.js"></script>
+<!-- Custom JS -->
+<script src="../js/script.js"></script>
+<!--<script src="../js/userController.js"></script>-->
+
+<script></script>
+
+<script>
+    $("#addUser").submit(function (event) {
+        event.preventDefault();
+
+        var password = $("#registerPassword").val();
+        var confirmPassword = $("#registerConfirmPassword").val();
+        if (password !== confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+        var profileImage = $("#profileImageInput")[0].files[0];
+        if (!profileImage) {
+            alert("Please select a profile image!");
+            return;
+        }
+
+        // Check file size (10MB limit)
+        if (profileImage.size > 10 * 1024 * 1024) {
+            alert("Profile image size exceeds maximum limit of 10MB!");
+            return;
+        }
+
+        var userData = {
+            fullName: $("#fullName").val(),
+            email: $("#email").val(),
+            password: password,
+            role: $("#registerRole").val()
+        };
+
+        var formData = new FormData();
+        formData.append("user", new Blob([JSON.stringify(userData)], { type: "application/json" }));
+        formData.append("profileImage", profileImage);
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3030/api/v1/user/register",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.code === 201) {
+                    alert("Registration Successful!");
+                    if (response.data && response.data.token) {
+                        localStorage.setItem("authToken", response.data.token);
+                    }
+                    if (userData.role === "ADMIN") {
+                        window.location.href = "admin-dashboard.html";
+                    } else if (userData.role === "INSTRUCTOR") {
+                        window.location.href = "instructorDashboard.html";
+                    } else {
+                        window.location.href = "studentHome.html";
+                    }
+                } else {
+                    alert("Registration failed: " + (response.message || "Unknown error"));
+                }
+            },
+            error: function (xhr) {
+                var errorMsg = xhr.responseJSON?.message || xhr.responseText || "Unknown error";
+                if (xhr.status === 413) {
+                    errorMsg = "File size exceeds maximum limit of 10MB";
+                }
+                alert("Registration failed: " + errorMsg);
+            }
+        });
+    });
+
+    function previewImage(event) {
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const previewImage = document.getElementById('imagePreview');
+
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                previewImage.src = reader.result;
+                previewContainer.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Delete User
+    $(document).on("click", ".deleteUser", function () {
+        var userId = $(this).data("id");
+        if (confirm("Are you sure you want to delete this user?")) {
+            $.ajax({
+                type: "DELETE",
+                url: `http://localhost:3030/api/v1/user/delete/${userId}`,
+                headers: { "Authorization": "Bearer " + localStorage.getItem("authToken") },
+                success: function () {
+                    alert("User deleted successfully");
+                    loadUsers();
+                },
+                error: function (xhr) {
+
+                    console.error("Error deleting user:", xhr.responseText);
+                    alert("Error deleting user");
+                }
+            });
+        }
+    });
+
+
+    // Reset Form Function
+    function resetForm() {
+        $("#fullName")[0].reset();
+        $("#email").prop("disabled", false);
+        $("#updateBtn").hide();
+        $("#saveBtn").show();
+    }
+
+
+    // Reset form button
+    $("#resetBtn").click(resetForm);
+
+    // Initialize on page load
+    $(document).ready(function() {
+        loadUsers();
+        resetForm();
+    });
+</script>
+</body>
+</html>

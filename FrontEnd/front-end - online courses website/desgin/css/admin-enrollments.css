@@ -1,0 +1,227 @@
+/* Enrollment Management Styles */
+.enrollments {
+    padding: 2rem;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-select {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: var(--border);
+    background-color: var(--white);
+    color: var(--black);
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#enrollment-search {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: var(--border);
+    width: 250px;
+}
+
+.export-btn {
+    background-color: var(--main-color);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+    background-color: var(--black);
+}
+
+.enrollment-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+.enrollment-table th,
+.enrollment-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: var(--border);
+}
+
+.enrollment-table th {
+    background-color: var(--light-bg);
+    font-weight: bold;
+}
+
+.enrollment-table tr:hover {
+    background-color: var(--light-bg);
+}
+
+.view-btn {
+    background-color: var(--main-color);
+    color: var(--white);
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.5rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+.delete-btn {
+    background-color: var(--red);
+    color: var(--white);
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.page-info {
+    font-size: 1.2rem;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: var(--white);
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    width: 50%;
+    max-width: 600px;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--black);
+}
+
+.enrollment-details {
+    margin: 1.5rem 0;
+}
+
+.detail-row {
+    display: flex;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-label {
+    font-weight: bold;
+    width: 150px;
+    color: var(--black);
+}
+
+.detail-value {
+    flex: 1;
+}
+
+.status-active {
+    color: var(--green);
+    font-weight: bold;
+}
+
+.status-inactive {
+    color: var(--red);
+    font-weight: bold;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.deactivate-btn {
+    background-color: var(--red);
+    color: var(--white);
+}
+
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-container {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .filter-box {
+        width: 100%;
+    }
+
+    .filter-select {
+        width: 100%;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    #enrollment-search {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+
+    .detail-row {
+        flex-direction: column;
+    }
+
+    .detail-label {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}

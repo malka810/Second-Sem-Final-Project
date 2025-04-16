@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quiz | EduNexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .quiz-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .quiz-form {
+            background: var(--white);
+            border-radius: .5rem;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.6rem;
+            color: var(--black);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.6rem;
+            border: var(--border);
+            border-radius: .5rem;
+            background: var(--light-bg);
+        }
+
+        .question-container {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: .5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .question-actions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .option-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .option-container input[type="radio"] {
+            margin-right: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: .5rem;
+            font-size: 1.6rem;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--main-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--light-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: white;
+        }
+
+        .quiz-list {
+            background: var(--white);
+            border-radius: .5rem;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .quiz-item {
+            padding: 1.5rem;
+            border-bottom: var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quiz-item:last-child {
+            border-bottom: none;
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body>
+<!-- Header and Sidebar same as dashboard -->
+
+<section class="quiz-container">
+    <h1 class="heading">Create New Quiz</h1>
+
+    <div class="quiz-form">
+        <form id="quizForm">
+            <div class="form-group">
+                <label for="quizTitle" class="form-label">Quiz Title</label>
+                <input type="text" id="quizTitle" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="courseSelect" class="form-label">Course</label>
+                <select id="courseSelect" class="form-control" required>
+                    <option value="">Select Course</option>
+                    <option value="CS101">CS101 - Introduction to Programming</option>
+                    <option value="MATH202">MATH202 - Advanced Calculus</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="quizDescription" class="form-label">Description</label>
+                <textarea id="quizDescription" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="timeLimit" class="form-label">Time Limit (minutes)</label>
+                <input type="number" id="timeLimit" class="form-control" min="1" value="30">
+            </div>
+
+            <h3>Questions</h3>
+            <div id="questionsContainer">
+                <!-- Questions will be added here dynamically -->
+            </div>
+
+            <div class="form-group">
+                <button type="button" id="addQuestionBtn" class="btn btn-secondary">
+                    <i class="fas fa-plus"></i> Add Question
+                </button>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Quiz
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <h2 class="heading">Your Quizzes</h2>
+    <div class="quiz-list" id="quizList">
+        <!-- Quizzes will be loaded here -->
+        <div class="quiz-item">
+            <div>
+                <h3>Midterm Exam</h3>
+                <p>CS101 - Introduction to Programming</p>
+                <p>5 Questions | 30 minutes</p>
+            </div>
+            <div class="quiz-actions">
+                <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // JavaScript for adding questions and managing quiz creation
+    document.getElementById('addQuestionBtn').addEventListener('click', function() {
+        const questionId = Date.now();
+        const questionHTML = `
+                <div class="question-container" id="question-${questionId}">
+                    <div class="question-actions">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(${questionId})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Question Type</label>
+                        <select class="form-control question-type" onchange="changeQuestionType(${questionId}, this.value)">
+                            <option value="multiple_choice">Multiple Choice</option>
+                            <option value="true_false">True/False</option>
+                            <option value="short_answer">Short Answer</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Question Text</label>
+                        <input type="text" class="form-control question-text" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Points</label>
+                        <input type="number" class="form-control question-points" min="1" value="1" required>
+                    </div>
+
+                    <div class="question-options" id="options-${questionId}">
+                        <div class="form-group">
+                            <label class="form-label">Options</label>
+                            <div class="option-container">
+                                <input type="radio" name="correct-${questionId}" value="0" checked>
+                                <input type="text" class="form-control option-text" placeholder="Option 1" required>
+                            </div>
+                            <div class="option-container">
+                                <input type="radio" name="correct-${questionId}" value="1">
+                                <input type="text" class="form-control option-text" placeholder="Option 2" required>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addOption(${questionId})">
+                                <i class="fas fa-plus"></i> Add Option
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('questionsContainer').insertAdjacentHTML('beforeend', questionHTML);
+    });
+
+    function removeQuestion(id) {
+        document.getElementById(`question-${id}`).remove();
+    }
+
+    function changeQuestionType(id, type) {
+        const optionsContainer = document.getElementById(`options-${id}`);
+
+        if (type === 'multiple_choice') {
+            optionsContainer.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Options</label>
+                        <div class="option-container">
+                            <input type="radio" name="correct-${id}" value="0" checked>
+                            <input type="text" class="form-control option-text" placeholder="Option 1" required>
+                        </div>
+                        <div class="option-container">
+                            <input type="radio" name="correct-${id}" value="1">
+                            <input type="text" class="form-control option-text" placeholder="Option 2" required>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addOption(${id})">
+                            <i class="fas fa-plus"></i> Add Option
+                        </button>
+                    </div>
+                `;
+        } else if (type === 'true_false') {
+            optionsContainer.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Correct Answer</label>
+                        <div class="option-container">
+                            <input type="radio" name="correct-${id}" value="true" checked>
+                            <label>True</label>
+                        </div>
+                        <div class="option-container">
+                            <input type="radio" name="correct-${id}" value="false">
+                            <label>False</label>
+                        </div>
+                    </div>
+                `;
+        } else {
+            optionsContainer.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Correct Answer</label>
+                        <input type="text" class="form-control correct-answer" required>
+                    </div>
+                `;
+        }
+    }
+
+    function addOption(id) {
+        const optionsContainer = document.getElementById(`options-${id}`).querySelector('.form-group');
+        const optionCount = optionsContainer.querySelectorAll('.option-container').length;
+
+        const optionHTML = `
+                <div class="option-container">
+                    <input type="radio" name="correct-${id}" value="${optionCount}">
+                    <input type="text" class="form-control option-text" placeholder="Option ${optionCount + 1}" required>
+                </div>
+            `;
+
+        optionsContainer.insertAdjacentHTML('beforeend', optionHTML);
+    }
+
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Save quiz logic here
+        alert('Quiz saved successfully!');
+    });
+</script>
+</body>
+</html>
