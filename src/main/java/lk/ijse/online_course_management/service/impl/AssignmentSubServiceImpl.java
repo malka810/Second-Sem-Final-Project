@@ -38,20 +38,16 @@ public class AssignmentSubServiceImpl implements AssignmentSubService {
     @Override
     public int saveSubmission(AssignmentSubDTO submissionDTO) {
         try {
-            // Check if assignment exists
             Assignment assignment = assignmentRepo.findById(submissionDTO.getAssignmentId())
                     .orElseThrow(() -> new RuntimeException("Assignment not found"));
 
-            // Check if student exists
             User student = userRepo.findById((submissionDTO.getStudentId()))
                     .orElseThrow(() -> new RuntimeException("Student not found"));
 
-            // Check for duplicate submission
             if (assignmentSubRepo.existsByAssignmentAndStudent(assignment, student)) {
-                return VarList.RSP_DUPLICATED; // "06"
+                return VarList.RSP_DUPLICATED;
             }
 
-            // Create new submission
             AssignmentSub submission = modelMapper.map(submissionDTO, AssignmentSub.class);
             submission.setAssignment(assignment);
             submission.setStudent(student);
@@ -59,11 +55,11 @@ public class AssignmentSubServiceImpl implements AssignmentSubService {
             submission.setGraded(false);
 
             assignmentSubRepo.save(submission);
-            return VarList.OK; // "00"
+            return VarList.OK;
 
         } catch (Exception e) {
             e.printStackTrace();
-            return VarList.RSP_ERROR; // "05"
+            return VarList.RSP_ERROR;
         }
     }
 
@@ -126,10 +122,10 @@ public class AssignmentSubServiceImpl implements AssignmentSubService {
             submission.setGraded(true);
 
             assignmentSubRepo.save(submission);
-            return VarList.OK; // "00"
+            return VarList.OK;
         } catch (Exception e) {
             e.printStackTrace();
-            return VarList.RSP_ERROR; // "05"
+            return VarList.RSP_ERROR;
         }
     }
 }

@@ -32,7 +32,7 @@ public class AssignmentController {
         this.assignmentService = assignmentService;
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
     public ResponseEntity<ResponseDTO> uploadAssignment(
             @RequestParam("title") String title,
             @RequestParam("description") String description,

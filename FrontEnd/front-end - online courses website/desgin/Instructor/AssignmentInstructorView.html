@@ -106,7 +106,6 @@
     </div>
 </div>
 
-<!-- Grading Modal -->
 <div class="modal fade" id="gradingModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -150,23 +149,19 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    // Global variables
     let currentCourseId = null;
     let assignments = [];
     let submissions = [];
 
-    // DOM Ready
     document.addEventListener('DOMContentLoaded', function() {
         loadCourses();
         loadAssignments();
 
-        // Form submission handlers
         document.getElementById('createAssignmentForm').addEventListener('submit', handleCreateAssignment);
         document.getElementById('gradingForm').addEventListener('submit', handleGradeSubmission);
         document.getElementById('assignmentFilter').addEventListener('change', filterSubmissions);
     });
 
-    // Load courses for dropdown
     async function loadCourses() {
         try {
             const response = await axios.get('/api/courses');
@@ -185,7 +180,6 @@
         }
     }
 
-    // Load all assignments
     async function loadAssignments() {
         try {
             const response = await axios.get('/api/assignments');
@@ -198,7 +192,6 @@
         }
     }
 
-    // Render assignments to the UI
     function renderAssignments() {
         const container = document.getElementById('assignmentsContainer');
         container.innerHTML = '';
@@ -227,7 +220,6 @@
         });
     }
 
-    // Handle assignment creation
     async function handleCreateAssignment(e) {
         e.preventDefault();
 
@@ -254,7 +246,6 @@
         }
     }
 
-    // Delete assignment
     async function deleteAssignment(assignmentId) {
         if (!confirm('Are you sure you want to delete this assignment?')) return;
 
@@ -267,7 +258,6 @@
         }
     }
 
-    // Load submissions for an assignment
     async function loadSubmissions(assignmentId = null) {
         try {
             const url = assignmentId
@@ -283,7 +273,6 @@
         }
     }
 
-    // Render submissions to the UI
     function renderSubmissions() {
         const container = document.getElementById('submissionsList');
         container.innerHTML = '';
@@ -317,7 +306,6 @@
         });
     }
 
-    // Open grading modal
     async function openGradingModal(submissionId) {
         const submission = submissions.find(s => s.submissionId === submissionId);
         if (!submission) return;
@@ -348,12 +336,10 @@
 
         downloadLink.href = submission.submissionFile;
 
-        // Initialize modal
         const modal = new bootstrap.Modal(document.getElementById('gradingModal'));
         modal.show();
     }
 
-    // Handle grade submission
     async function handleGradeSubmission(e) {
         e.preventDefault();
 
@@ -377,14 +363,12 @@
         }
     }
 
-    // Filter submissions by assignment
     function filterSubmissions() {
         const assignmentId = this.value;
         currentCourseId = assignmentId;
         loadSubmissions(assignmentId);
     }
 
-    // Populate assignment filter dropdown
     function populateAssignmentFilter() {
         const filterSelect = document.getElementById('assignmentFilter');
         filterSelect.innerHTML = '<option value="">Filter by Assignment</option>';

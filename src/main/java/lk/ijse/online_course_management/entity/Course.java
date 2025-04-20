@@ -1,6 +1,7 @@
 package lk.ijse.online_course_management.entity;
 
 import jakarta.persistence.*;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -23,14 +24,18 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "instructor_id", referencedColumnName = "user_id")
     private User instructor;
+    @Setter
+    @Column(name = "is_active", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean active = true;
     public Course() {}
 
-    public Course(UUID courseId, String title, String description, String instructorName, User instructor) {
+    public Course(UUID courseId, String title, String description, String instructorName, User instructor, Boolean active) {
         this.courseId = courseId;
         this.title = title;
         this.description = description;
         this.instructorName = instructorName;
         this.instructor = instructor;
+        this.active = active;
     }
 
     public UUID getCourseId() {
@@ -82,6 +87,10 @@ public class Course {
         }
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
     @PrePersist
     @PreUpdate
     private void syncInstructorName() {
@@ -90,4 +99,15 @@ public class Course {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "courseId=" + courseId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", instructorName='" + instructorName + '\'' +
+                ", instructor=" + instructor +
+                ", active=" + active +
+                '}';
+    }
 }

@@ -16,4 +16,7 @@ public interface CourseRepo extends JpaRepository<Course, UUID> {
 
     @Query("SELECT c FROM Course c WHERE c.instructor.userId = :instructorId")
     List<Course> findByInstructorUserId(UUID instructorId);
+
+    @Query("SELECT c FROM Course c WHERE c.active = true")
+    List<Course> findByActiveTrue();
 }

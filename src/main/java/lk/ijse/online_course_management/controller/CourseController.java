@@ -42,17 +42,6 @@ public class CourseController {
         }
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<ResponseDTO> createCourse(@RequestBody CourseDTO courseDTO) {
-//        try {
-//            int createdCourse = courseService.saveCourse(courseDTO);
-//            return ResponseEntity.status(HttpStatus.CREATED)
-//                    .body(new ResponseDTO(VarList.Success, "Course created successfully", createdCourse));
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(new ResponseDTO(VarList.RSP_ERROR, "Error: " + e.getMessage(), null));
-//        }
-//    }
 
     @GetMapping("/all")
     public ResponseEntity<ResponseDTO> getAllCourses() {
@@ -122,6 +111,18 @@ public class CourseController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(VarList.RSP_ERROR, "Error retrieving courses: " + e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<ResponseDTO> getActiveCourses() {
+        try {
+            List<CourseDTO> activeCourses = courseService.getActiveCourses();
+            return ResponseEntity.ok()
+                    .body(new ResponseDTO(VarList.Success, "Active courses retrieved successfully", activeCourses));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.RSP_ERROR, "Error retrieving active courses", null));
         }
     }
 }

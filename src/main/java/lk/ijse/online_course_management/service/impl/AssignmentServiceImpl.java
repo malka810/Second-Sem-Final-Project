@@ -32,17 +32,12 @@ public class AssignmentServiceImpl implements AssignmentService {
             Course course = courseRepo.findById(assignmentDTO.getCourseId())
                     .orElseThrow(() -> new RuntimeException("Course not found"));
 
-            // Check for duplicate assignment title in the same course
             if (assignmentRepo.existsByTitleAndCourse_CourseId(assignmentDTO.getTitle(), assignmentDTO.getCourseId())) {
                 return VarList.RSP_DUPLICATED;
             }
-
-            // Map DTO to entity
             Assignment assignment = modelMapper.map(assignmentDTO, Assignment.class);
             assignment.setCreatedAt(LocalDateTime.now());
             assignment.setCourse(course);
-
-            // Save the assignment
             assignmentRepo.save(assignment);
             return VarList.Created;
 
@@ -95,22 +90,17 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public int updateAssignment(AssignmentDTO assignmentDTO) {
         try {
-            // Check if assignment exists
             Assignment existingAssignment = assignmentRepo.findById(assignmentDTO.getId())
                     .orElseThrow(() -> new RuntimeException("Assignment not found"));
 
-            // Check if course exists
             Course course = courseRepo.findById(assignmentDTO.getCourseId())
                     .orElseThrow(() -> new RuntimeException("Course not found"));
-
-            // Update assignment fields
             existingAssignment.setTitle(assignmentDTO.getTitle());
             existingAssignment.setDescription(assignmentDTO.getDescription());
             existingAssignment.setFilePath(assignmentDTO.getFilePath());
             existingAssignment.setDueDate(assignmentDTO.getDueDate());
             existingAssignment.setCourse(course);
 
-            // Save the updated assignment
             assignmentRepo.save(existingAssignment);
             return VarList.OK;
 

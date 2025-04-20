@@ -2,9 +2,516 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Enrollment Table Styles */
+        .enrollments {
+            padding: 2rem;
+        }
+
+        .enrollment-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .enrollment-table th,
+        .enrollment-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .enrollment-table th {
+            background-color: #9b2ed5;
+            color: white;
+        }
+
+        .enrollment-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .search-filter {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-box {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            flex: 1;
+        }
+
+        .delete-btn {
+            background-color: #ff4757;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin-left: 0.5rem;
+        }
+
+        .view-btn {
+            background-color: #9b2ed5;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Filter Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ddd;
+        }
+
+        .export-btn {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+        }
+
+        #enrollment-search {
+            padding: 0.5rem;
+            border-radius: 0.5rem 0 0 0.5rem;
+            border: 1px solid #ddd;
+            border-right: none;
+        }
+
+        .search-btn {
+            border-radius: 0 0.5rem 0.5rem 0;
+            padding: 0.5rem 1rem;
+
+            .no-data {
+                text-align: center;
+                color: #666;
+                padding: 20px;
+            }
+
+            .error {
+                text-align: center;
+                color: #ff4757;
+                padding: 20px;
+            }
+
+            .pagination span {
+                margin: 0 15px;
+            }
+
+            .pagination .btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+    </style>
 </head>
 <body>
+
+<header class="header">
+    <section class="flex">
+        <a href="../admin-dashboard.html" class="logo"><img src="../images/logo.png" class="image" alt=""><b id="logoN" style="color: #9b2ed5">EduNexus</b></a>
+        <form action="search.html" method="post" class="search-form">
+            <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
+            <button type="submit" class="fas fa-search"></button>
+        </form>
+        <div class="icons">
+            <div id="menu-btn" class="fas fa-bars"></div>
+            <div id="search-btn" class="fas fa-search"></div>
+            <div id="user-btn" class="fas fa-user"></div>
+            <div id="toggle-btn" class="fas fa-sun"></div>
+        </div>
+        <div class="profile">
+            <img src="../images/User.png" width="80" height="80" class="image" alt="">
+            <p class="role">Admin</p>
+            <a href="profile.html" class="btn">view profile</a>
+        </div>
+    </section>
+</header>
+
+<div class="side-bar">
+    <div id="close-btn">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="profile">
+        <img src="../images/User.png" class="image" alt="">
+        <p class="role">Admin</p>
+        <a href="profile.html" class="btn">view profile</a>
+    </div>
+    <nav class="navbar">
+        <a href="../admin-dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+        <a href="MangeUsers.html"><i class="fas fa-chalkboard-user"></i><span>Manage Users</span></a>
+        <a href="course-manage.html"><i class="fas fa-graduation-cap"></i><span>Manage Courses</span></a>
+        <a href="enrollment.html"><i class="fas fa-tasks"></i><span>Enrollments</span></a>
+        <a href="index.html" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="logout-text">Logout</span>
+        </a>
+    </nav>
+</div>
+
+<section class="enrollments">
+    <h1 class="heading">Student Enrollments</h1>
+
+    <div class="controls">
+        <div class="filter-container">
+            <div class="filter-box">
+                <label for="course-filter">Filter by Course:</label>
+                <select id="course-filter" class="filter-select">
+                    <option value="all">All Courses</option>
+                </select>
+            </div>
+
+            <div class="filter-box">
+                <label for="date-filter">Filter by Date:</label>
+                <select id="date-filter" class="filter-select">
+                    <option value="all">All Dates</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                </select>
+            </div>
+
+            <button class="btn export-btn">
+                <i class="fas fa-file-export"></i> Export to CSV
+            </button>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="enrollment-search" placeholder="Search enrollments...">
+            <button class="btn search-btn"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+
+    <div class="enrollment-table">
+        <table>
+            <thead>
+            <tr>
+                <th>Enrollment ID</th>
+                <th>Course Title</th>
+                <th>Student Name</th>
+                <th>Enrollment Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="enrollmentTableBody">
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        <button class="btn">Previous</button>
+        <span>Page 1 of 3</span>
+        <button class="btn">Next</button>
+    </div>
+</section>
+
+<footer class="footer">
+    &copy; copyright @ 2025 by <span>web designer</span> | all rights reserved!
+</footer>
+
+<script src="../js/script.js"></script>
+<script>
+    let allEnrollments = [];
+    const itemsPerPage = 10;
+    let currentPage = 1;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadEnrollments();
+        setupEventListeners();
+    });
+
+    function setupEventListeners() {
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-btn')) {
+                const enrollmentId = e.target.dataset.id;
+                confirmDelete(enrollmentId);
+            }
+        });
+        document.getElementById('course-filter').addEventListener('change', applyFilters);
+        document.getElementById('date-filter').addEventListener('change', applyFilters);
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            applyFilters();
+        });
+        document.querySelector('.export-btn').addEventListener('click', exportToCSV);
+        document.querySelector('.pagination .btn:first-child').addEventListener('click', previousPage);
+        document.querySelector('.pagination .btn:last-child').addEventListener('click', nextPage);
+    }
+
+    function loadEnrollments() {
+        fetch('/api/v1/enrollments/all')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.code === "00") { // Assuming "00" is your success code
+                    allEnrollments = data.content;
+                    displayEnrollments(allEnrollments);
+                    updatePagination();
+                } else {
+                    throw new Error(data.message || 'Failed to fetch enrollments');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('Error loading enrollments: ' + error.message);
+            });
+    }
+
+    function confirmDelete(enrollmentId) {
+        if (confirm('Are you sure you want to remove this enrollment?')) {
+            fetch(`/api/v1/enrollments/${enrollmentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete enrollment');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.code === "00") {
+                        alert('Enrollment deleted successfully');
+                        loadEnrollments(); // Refresh the list
+                    } else {
+                        throw new Error(data.message || 'Failed to delete enrollment');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error deleting enrollment: ' + error.message);
+                });
+        }
+    }
+
+    function applyFilters() {
+        const courseFilter = document.getElementById('course-filter').value;
+        const dateFilter = document.getElementById('date-filter').value;
+        const searchTerm = document.getElementById('enrollment-search').value.toLowerCase();
+
+        let filtered = [...allEnrollments];
+        if (courseFilter !== 'all') {
+            filtered = filtered.filter(e => e.courseId === courseFilter);
+        }
+        if (dateFilter !== 'all') {
+            const now = new Date();
+            filtered = filtered.filter(e => {
+                const enrollDate = new Date(e.enrollDate);
+                switch(dateFilter) {
+                    case 'today':
+                        return enrollDate.toDateString() === now.toDateString();
+                    case 'week':
+                        const oneWeekAgo = new Date();
+                        oneWeekAgo.setDate(now.getDate() - 7);
+                        return enrollDate >= oneWeekAgo;
+                    case 'month':
+                        const oneMonthAgo = new Date();
+                        oneMonthAgo.setMonth(now.getMonth() - 1);
+                        return enrollDate >= oneMonthAgo;
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        if (searchTerm) {
+            filtered = filtered.filter(e =>
+                e.courseTitle.toLowerCase().includes(searchTerm) ||
+                e.studentName.toLowerCase().includes(searchTerm) ||
+                e.enrollmentId.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        displayEnrollments(filtered);
+        currentPage = 1;
+        updatePagination();
+    }
+
+    function displayEnrollments(enrollments) {
+        const tableBody = document.getElementById('enrollmentTableBody');
+        tableBody.innerHTML = '';
+
+        if (enrollments.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" class="no-data">No enrollments found</td></tr>';
+            return;
+        }
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const paginatedItems = enrollments.slice(startIndex, startIndex + itemsPerPage);
+
+        paginatedItems.forEach(enrollment => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${enrollment.enrollmentId.substring(0, 8)}</td>
+                <td>${enrollment.courseTitle}</td>
+                <td>${enrollment.studentName}</td>
+                <td>${formatDate(enrollment.enrollDate)}</td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="enrollment-details.html?id=${enrollment.enrollmentId}" class="btn view-btn">View</a>
+                        <button class="btn delete-btn" data-id="${enrollment.enrollmentId}">Remove</button>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+
+    function exportToCSV() {
+        const filtered = getFilteredEnrollments();
+        let csvContent = "data:text/csv;charset=utf-8,";
+
+        csvContent += "Enrollment ID,Course Title,Student Name,Enrollment Date\n";
+        filtered.forEach(enrollment => {
+            const row = [
+                enrollment.enrollmentId,
+                `"${enrollment.courseTitle}"`,
+                `"${enrollment.studentName}"`,
+                formatDate(enrollment.enrollDate)
+            ].join(',');
+            csvContent += row + "\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `enrollments_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function getFilteredEnrollments() {
+        const courseFilter = document.getElementById('course-filter').value;
+        const dateFilter = document.getElementById('date-filter').value;
+        const searchTerm = document.getElementById('enrollment-search').value.toLowerCase();
+
+        let filtered = [...allEnrollments];
+
+        if (courseFilter !== 'all') {
+            filtered = filtered.filter(e => e.courseId === courseFilter);
+        }
+
+        if (dateFilter !== 'all') {
+            const now = new Date();
+            filtered = filtered.filter(e => {
+                const enrollDate = new Date(e.enrollDate);
+                switch(dateFilter) {
+                    case 'today':
+                        return enrollDate.toDateString() === now.toDateString();
+                    case 'week':
+                        const oneWeekAgo = new Date();
+                        oneWeekAgo.setDate(now.getDate() - 7);
+                        return enrollDate >= oneWeekAgo;
+                    case 'month':
+                        const oneMonthAgo = new Date();
+                        oneMonthAgo.setMonth(now.getMonth() - 1);
+                        return enrollDate >= oneMonthAgo;
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        if (searchTerm) {
+            filtered = filtered.filter(e =>
+                e.courseTitle.toLowerCase().includes(searchTerm) ||
+                e.studentName.toLowerCase().includes(searchTerm) ||
+                e.enrollmentId.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        return filtered;
+    }
+
+    function previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            applyFilters();
+        }
+    }
+
+    function nextPage() {
+        const filtered = getFilteredEnrollments();
+        const totalPages = Math.ceil(filtered.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            applyFilters();
+        }
+    }
+
+    function updatePagination() {
+        const filtered = getFilteredEnrollments();
+        const totalPages = Math.ceil(filtered.length / itemsPerPage);
+        document.querySelector('.pagination span').textContent = `Page ${currentPage} of ${totalPages}`;
+    }
+
+    function showError(message) {
+        const tableBody = document.getElementById('enrollmentTableBody');
+        tableBody.innerHTML = `<tr><td colspan="5" class="error">${message}</td></tr>`;
+    }
+</script>
 
 </body>
 </html>

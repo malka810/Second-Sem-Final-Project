@@ -131,4 +131,13 @@ public class CourseServiceImpl implements CourseService {
                 .map(course -> modelMapper.map(course, CourseDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<CourseDTO> getActiveCourses() {
+        List<Course> activeCourses = courseRepository.findByActiveTrue();
+        return activeCourses.stream()
+                .map(course -> modelMapper.map(course, CourseDTO.class))
+                .collect(Collectors.toList());
+    }
+
 }

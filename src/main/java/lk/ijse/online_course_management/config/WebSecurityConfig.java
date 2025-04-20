@@ -59,6 +59,7 @@ public class WebSecurityConfig {
                                 "/api/v1/user/update/{userId}",
                                 "/api/v1/user/{userId}",
                                 "/api/v1/auth/refreshToken",
+                                "/api/v1/materials/videos/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html").permitAll()

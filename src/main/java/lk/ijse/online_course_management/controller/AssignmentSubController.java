@@ -34,22 +34,17 @@ public class AssignmentSubController {
             @RequestParam("file") MultipartFile file) {
 
         try {
-            // Create upload directory if it doesn't exist
             Path uploadPath = Paths.get(uploadDirectory);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-
-            // Generate unique filename
             String originalFilename = file.getOriginalFilename();
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
             String uniqueFilename = UUID.randomUUID() + fileExtension;
 
-            // Save file
             Path filePath = Paths.get(uploadDirectory, uniqueFilename);
             Files.write(filePath, file.getBytes());
 
-            // Create submission DTO
             AssignmentSubDTO submissionDTO = new AssignmentSubDTO();
             submissionDTO.setAssignmentId(assignmentId);
             submissionDTO.setStudentId(studentId);
@@ -57,7 +52,6 @@ public class AssignmentSubController {
             submissionDTO.setSubmittedAt(LocalDateTime.now());
             submissionDTO.setGraded(false);
 
-            // Save submission
             String response = String.valueOf(assignmentSubService.saveSubmission(submissionDTO));
 
             if (response.equals("00")) {

@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class EnrollmentServiceImpl implements EnrollmentService {
@@ -32,12 +36,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public int saveEnroll(EnrollmentDTO enrollmentDTO) {
         try {
-            // Find user and verify they are a student
             User user = userRepo.findById((enrollmentDTO.getStudentId()))
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             if (!"STUDENT".equals(user.getRole())) {
-                return VarList.Not_Acceptable; // Or your custom code for invalid role
+                return VarList.Not_Acceptable;
             }
 
             Course course = courseRepo.findById(enrollmentDTO.getCourseId())
@@ -60,5 +63,28 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return VarList.RSP_ERROR;
         }
     }
+
+    @Override
+    public List<EnrollmentDTO> getAllEnrollments() {
+        List<Enrollment> enrollments = enrollmentRepo.findAll();
+        return enrollments.stream()
+                .map(enrollment -> {
+                    EnrollmentDTO dto = modelMapper.map(enrollment, EnrollmentDTO.class);
+                    dto.setCourseTitle(enrollment.getCourse().getTitle());
+                    dto.setStudentName(enrollment.getStudent().getFullName());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteEnrollment(UUID enrollmentId) {
+        if (!enrollmentRepo.existsById(enrollmentId)) {
+            throw new RuntimeException("Enrollment not found");
+        }
+        enrollmentRepo.deleteById(enrollmentId);
+    }
+
+
+}
 

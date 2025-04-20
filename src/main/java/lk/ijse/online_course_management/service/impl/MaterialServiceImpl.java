@@ -1,5 +1,6 @@
 package lk.ijse.online_course_management.service.impl;
 
+import jakarta.annotation.PostConstruct;
 import lk.ijse.online_course_management.dto.MaterialDTO;
 import lk.ijse.online_course_management.entity.Course;
 import lk.ijse.online_course_management.entity.Material;
@@ -8,6 +9,7 @@ import lk.ijse.online_course_management.repo.MaterialRepo;
 import lk.ijse.online_course_management.service.MaterialService;
 import lk.ijse.online_course_management.util.VarList;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,15 @@ public class MaterialServiceImpl implements MaterialService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @PostConstruct
+    public void init() {
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                .setAmbiguityIgnored(true);
+        modelMapper.createTypeMap(Material.class, MaterialDTO.class)
+                .addMapping(src -> src.getCourse().getTitle(), MaterialDTO::setCourseTitle);
+    }
+
     @Override
     public int uploadMaterial(MaterialDTO materialDTO) {
         try {
@@ -40,13 +51,15 @@ public class MaterialServiceImpl implements MaterialService {
                 return VarList.RSP_DUPLICATED;
             }
 
-            Material material = modelMapper.map(materialDTO, Material.class);
-            material.setUploadAt(new Date());
+            Material material = new Material();
+            material.setTitle(materialDTO.getTitle());
+            material.setFileUrl(materialDTO.getFileUrl());
             material.setCourse(course);
+            material.setCourseTitle(course.getTitle());
+            material.setUploadAt(new Date());
 
             materialRepository.save(material);
-            return VarList.Success;
-
+            return VarList.Created;
         } catch (Exception e) {
             e.printStackTrace();
             return VarList.RSP_ERROR;

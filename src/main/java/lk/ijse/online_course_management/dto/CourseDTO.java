@@ -1,7 +1,5 @@
 package lk.ijse.online_course_management.dto;
 
-import lk.ijse.online_course_management.entity.Course;
-
 import java.util.UUID;
 
 public class CourseDTO {
@@ -11,15 +9,17 @@ public class CourseDTO {
     private UUID instructorId;
     private String instructorName;
     private String imagePath;
+    private boolean active = true;
 
     public CourseDTO(){}
 
-    public CourseDTO(UUID courseId, String title, String description, UUID instructorId, String instructorName, String imagePath) {
+    public CourseDTO(UUID courseId, String title, String description, UUID instructorId, String instructorName, String imagePath, boolean active) {
         this.title = title;
         this.description = description;
         this.instructorId = instructorId;
         this.instructorName = instructorName;
         this.imagePath = imagePath;
+        this.active = active;
     }
 
     public UUID getCourseId() {
@@ -69,6 +69,15 @@ public class CourseDTO {
         this.imagePath = imagePath;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+
     @Override
     public String toString() {
         return "CourseDTO{" +
@@ -78,6 +87,7 @@ public class CourseDTO {
                 ", instructorId=" + instructorId +
                 ", instructorName='" + instructorName + '\'' +
                 ", imagePath='" + imagePath + '\'' +
+                ", active=" + active +
                 '}';
     }
 }

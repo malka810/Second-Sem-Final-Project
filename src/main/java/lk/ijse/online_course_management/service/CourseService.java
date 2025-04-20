@@ -21,4 +21,6 @@ public interface CourseService {
     CourseDTO resetCourse(UUID courseId);
 
     List<CourseDTO> getCoursesByInstructor(UUID instructorId);
+
+    List<CourseDTO> getActiveCourses();
 }
