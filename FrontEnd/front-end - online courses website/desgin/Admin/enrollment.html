@@ -6,13 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrollment</title>
 
-    <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
-    <!-- custom css file link  -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <link rel="stylesheet" href="../css/style.css">
     <style>
-        /* Enrollment Table Styles */
+        .footer {
+            margin-top: 35rem;
+
+        }
         .enrollments {
             padding: 2rem;
         }
@@ -28,10 +31,11 @@
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #eee;
+            font-size: large;
         }
 
         .enrollment-table th {
-            background-color: #9b2ed5;
+            background-color: #dcb5f1;
             color: white;
         }
 
@@ -53,7 +57,7 @@
         }
 
         .delete-btn {
-            background-color: #ff4757;
+            background-color: #000000;
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
@@ -61,9 +65,10 @@
         }
 
         .view-btn {
-            background-color: #9b2ed5;
+            background-color: #b950f3;
             color: white;
             padding: 0.5rem 1rem;
+            font-size: medium;
             border-radius: 0.5rem;
         }
 
@@ -108,10 +113,6 @@
             border: 1px solid #ddd;
         }
 
-        .export-btn {
-            background-color: #2ecc71;
-            color: white;
-        }
 
         .search-box {
             display: flex;
@@ -128,27 +129,27 @@
         .search-btn {
             border-radius: 0 0.5rem 0.5rem 0;
             padding: 0.5rem 1rem;
+        }
 
-            .no-data {
-                text-align: center;
-                color: #666;
-                padding: 20px;
-            }
+        .no-data {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
 
-            .error {
-                text-align: center;
-                color: #ff4757;
-                padding: 20px;
-            }
+        .error {
+            text-align: center;
+            color: #ff4757;
+            padding: 20px;
+        }
 
-            .pagination span {
-                margin: 0 15px;
-            }
+        .pagination span {
+            margin: 0 15px;
+        }
 
-            .pagination .btn:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
+        .pagination .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -189,7 +190,7 @@
         <a href="MangeUsers.html"><i class="fas fa-chalkboard-user"></i><span>Manage Users</span></a>
         <a href="course-manage.html"><i class="fas fa-graduation-cap"></i><span>Manage Courses</span></a>
         <a href="enrollment.html"><i class="fas fa-tasks"></i><span>Enrollments</span></a>
-        <a href="index.html" class="logout-btn">
+        <a href="../index.html" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>
             <span class="logout-text">Logout</span>
         </a>
@@ -241,15 +242,14 @@
             </tr>
             </thead>
             <tbody id="enrollmentTableBody">
-
             </tbody>
         </table>
     </div>
 
     <div class="pagination">
-        <button class="btn">Previous</button>
-        <span>Page 1 of 3</span>
-        <button class="btn">Next</button>
+        <button class="btn prev-btn">Previous</button>
+        <span>Page 1 of 1</span>
+        <button class="btn next-btn">Next</button>
     </div>
 </section>
 
@@ -258,97 +258,112 @@
 </footer>
 
 <script src="../js/script.js"></script>
+<script src="../js/jquery.js"></script>
 <script>
     let allEnrollments = [];
     const itemsPerPage = 10;
     let currentPage = 1;
 
-    document.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
         loadEnrollments();
         setupEventListeners();
     });
 
     function setupEventListeners() {
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('delete-btn')) {
-                const enrollmentId = e.target.dataset.id;
-                confirmDelete(enrollmentId);
+        $(document).on('click', '.delete-btn', function() {
+            const enrollmentId = $(this).data('id');
+            confirmDelete(enrollmentId);
+        });
+
+        $('#course-filter').on('change', applyFilters);
+        $('#date-filter').on('change', applyFilters);
+        $('.search-btn').on('click', applyFilters);
+        $('#enrollment-search').on('keyup', function(e) {
+            if (e.key === 'Enter') {
+                applyFilters();
             }
         });
-        document.getElementById('course-filter').addEventListener('change', applyFilters);
-        document.getElementById('date-filter').addEventListener('change', applyFilters);
-        document.querySelector('.search-btn').addEventListener('click', function() {
-            applyFilters();
-        });
-        document.querySelector('.export-btn').addEventListener('click', exportToCSV);
-        document.querySelector('.pagination .btn:first-child').addEventListener('click', previousPage);
-        document.querySelector('.pagination .btn:last-child').addEventListener('click', nextPage);
+        $('.export-btn').on('click', exportToCSV);
+        $('.prev-btn').on('click', previousPage);
+        $('.next-btn').on('click', nextPage);
     }
 
     function loadEnrollments() {
-        fetch('/api/v1/enrollments/all')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.code === "00") { // Assuming "00" is your success code
-                    allEnrollments = data.content;
+        console.log("Loading enrollments...");
+        $.ajax({
+            url: "http://localhost:3030/api/v1/enrollments/all",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("authToken")
+            },
+            success: function(response) {
+                console.log("Enrollments loaded:", response);
+                const tableBody = $("#enrollmentTableBody");
+                tableBody.empty();
+                if (response.code === 200 && response.data && response.data.length > 0) {
+                    allEnrollments = response.data;  // Changed from response.content
                     displayEnrollments(allEnrollments);
+                    updateCourseFilter(allEnrollments);
                     updatePagination();
                 } else {
-                    throw new Error(data.message || 'Failed to fetch enrollments');
+                    tableBody.append(`
+            <tr>
+                <td colspan="5" class="no-data">No enrollments found</td>
+            </tr>
+        `);
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showError('Error loading enrollments: ' + error.message);
-            });
+            },
+            error: function(xhr) {
+                console.error("Error loading enrollments:", xhr);
+                $("#enrollmentTableBody").html(`
+                    <tr>
+                        <td colspan="5" class="error">Error loading enrollments</td>
+                    </tr>
+                `);
+                alert("Error loading enrollments: " + (xhr.responseJSON?.message || "Server error"));
+            }
+        });
     }
 
     function confirmDelete(enrollmentId) {
         if (confirm('Are you sure you want to remove this enrollment?')) {
-            fetch(`/api/v1/enrollments/${enrollmentId}`, {
-                method: 'DELETE',
+            $.ajax({
+                url: "http://localhost:3030/api/v1/enrollments/" + enrollmentId,
+                type: "DELETE",
                 headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to delete enrollment');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.code === "00") {
+                    "Authorization": "Bearer " + localStorage.getItem("authToken")
+                },
+                success: function(response) {
+                    if (response.code === "00") {
                         alert('Enrollment deleted successfully');
-                        loadEnrollments(); // Refresh the list
+                        loadEnrollments();
                     } else {
-                        throw new Error(data.message || 'Failed to delete enrollment');
+                        alert(response.message || 'Failed to delete enrollment');
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error deleting enrollment: ' + error.message);
-                });
+                },
+                error: function(xhr) {
+                    console.error("Error deleting enrollment:", xhr);
+                    alert("Error deleting enrollment: " + (xhr.responseJSON?.message || "Server error"));
+                }
+            });
         }
     }
 
     function applyFilters() {
-        const courseFilter = document.getElementById('course-filter').value;
-        const dateFilter = document.getElementById('date-filter').value;
-        const searchTerm = document.getElementById('enrollment-search').value.toLowerCase();
+        const courseFilter = $("#course-filter").val();
+        const dateFilter = $("#date-filter").val();
+        const searchTerm = $("#enrollment-search").val().toLowerCase();
 
         let filtered = [...allEnrollments];
+
         if (courseFilter !== 'all') {
-            filtered = filtered.filter(e => e.courseId === courseFilter);
+            filtered = filtered.filter(e => e.course && e.course.id === courseFilter);
         }
+
         if (dateFilter !== 'all') {
             const now = new Date();
             filtered = filtered.filter(e => {
+                if (!e.enrollDate) return false;
                 const enrollDate = new Date(e.enrollDate);
                 switch(dateFilter) {
                     case 'today':
@@ -369,10 +384,9 @@
 
         if (searchTerm) {
             filtered = filtered.filter(e =>
-                e.courseTitle.toLowerCase().includes(searchTerm) ||
-                e.studentName.toLowerCase().includes(searchTerm) ||
-                e.enrollmentId.toLowerCase().includes(searchTerm)
-            );
+                (e.courseTitle && e.courseTitle.toLowerCase().includes(searchTerm)) ||
+                (e.studentName && e.studentName.toLowerCase().includes(searchTerm)) ||
+                (e.enrollmentId && e.enrollmentId.toLowerCase().includes(searchTerm)));
         }
 
         displayEnrollments(filtered);
@@ -381,31 +395,54 @@
     }
 
     function displayEnrollments(enrollments) {
-        const tableBody = document.getElementById('enrollmentTableBody');
-        tableBody.innerHTML = '';
+        const tableBody = $("#enrollmentTableBody");
+        tableBody.empty();
 
         if (enrollments.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="no-data">No enrollments found</td></tr>';
+            tableBody.append('<tr><td colspan="5" class="no-data">No enrollments found</td></tr>');
             return;
         }
+
         const startIndex = (currentPage - 1) * itemsPerPage;
         const paginatedItems = enrollments.slice(startIndex, startIndex + itemsPerPage);
 
         paginatedItems.forEach(enrollment => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${enrollment.enrollmentId.substring(0, 8)}</td>
-                <td>${enrollment.courseTitle}</td>
-                <td>${enrollment.studentName}</td>
-                <td>${formatDate(enrollment.enrollDate)}</td>
-                <td>
-                    <div class="action-buttons">
-                        <a href="enrollment-details.html?id=${enrollment.enrollmentId}" class="btn view-btn">View</a>
-                        <button class="btn delete-btn" data-id="${enrollment.enrollmentId}">Remove</button>
-                    </div>
-                </td>
-            `;
-            tableBody.appendChild(row);
+            let studentName = 'Unknown student';
+            let courseTitle = 'No title';
+
+            if (enrollment.student && enrollment.student.fullName) {
+                studentName = enrollment.student.fullName;
+            }
+            else if (enrollment.studentName) {
+                studentName = enrollment.studentName;
+            }
+            else if (enrollment.student_full_name) {
+                studentName = enrollment.student_full_name;
+            }
+
+            if (enrollment.courseTitle) {
+                courseTitle = enrollment.courseTitle;
+            } else if (enrollment.course && enrollment.course.title) {
+                courseTitle = enrollment.course.title;
+            }
+
+            const row = `
+    <tr>
+        <td>${enrollment.enrollmentId ? enrollment.enrollmentId.substring(0, 8) : 'N/A'}</td>
+        <td>${enrollment.courseTitle || 'N/A'}</td>
+        <td>${enrollment.studentName || 'N/A'}</td>
+        <td>${enrollment.enrollDate ? formatDate(enrollment.enrollDate) : 'N/A'}</td>
+        <td class="action-buttons">
+            <a href="enrollment-details.html?id=${enrollment.enrollmentId}" class="btn view-btn">
+                <i class="fas fa-eye"></i> View
+            </a>
+            <button class="btn delete-btn" data-id="${enrollment.enrollmentId}">
+                <i class="fas fa-trash"></i> Remove
+            </button>
+        </td>
+    </tr>
+`;
+            tableBody.append(row);
         });
     }
 
@@ -418,17 +455,53 @@
         });
     }
 
+    function updateCourseFilter(enrollments) {
+        const courseFilter = $("#course-filter");
+        courseFilter.empty();
+        courseFilter.append('<option value="all">All Courses</option>');
+
+        const uniqueCourses = {};
+        enrollments.forEach(enrollment => {
+            if (enrollment.courseId && enrollment.courseTitle) {
+                uniqueCourses[enrollment.courseId] = enrollment.courseTitle;
+            }
+        });
+
+        Object.entries(uniqueCourses).forEach(([id, title]) => {
+            courseFilter.append(`<option value="${id}">${title}</option>`);
+        });
+    }
+
     function exportToCSV() {
         const filtered = getFilteredEnrollments();
         let csvContent = "data:text/csv;charset=utf-8,";
 
         csvContent += "Enrollment ID,Course Title,Student Name,Enrollment Date\n";
         filtered.forEach(enrollment => {
+            let studentName = 'Unknown student';
+            let courseTitle = 'No title';
+
+            if (enrollment.student && enrollment.student.fullName) {
+                studentName = enrollment.student.fullName;
+            }
+            else if (enrollment.studentName) {
+                studentName = enrollment.studentName;
+            }
+            else if (enrollment.student_full_name) {
+                studentName = enrollment.student_full_name;
+            }
+
+            if (enrollment.courseTitle) {
+                courseTitle = enrollment.courseTitle;
+            } else if (enrollment.course && enrollment.course.title) {
+                courseTitle = enrollment.course.title;
+            }
+
             const row = [
-                enrollment.enrollmentId,
-                `"${enrollment.courseTitle}"`,
-                `"${enrollment.studentName}"`,
-                formatDate(enrollment.enrollDate)
+                enrollment.enrollmentId || 'N/A',
+                `"${courseTitle}"`,
+                `"${studentName}"`,
+                enrollment.enrollDate ? formatDate(enrollment.enrollDate) : 'N/A'
             ].join(',');
             csvContent += row + "\n";
         });
@@ -443,19 +516,23 @@
     }
 
     function getFilteredEnrollments() {
-        const courseFilter = document.getElementById('course-filter').value;
-        const dateFilter = document.getElementById('date-filter').value;
-        const searchTerm = document.getElementById('enrollment-search').value.toLowerCase();
+        const courseFilter = $("#course-filter").val();
+        const dateFilter = $("#date-filter").val();
+        const searchTerm = $("#enrollment-search").val().toLowerCase();
 
         let filtered = [...allEnrollments];
 
         if (courseFilter !== 'all') {
-            filtered = filtered.filter(e => e.courseId === courseFilter);
+            filtered = filtered.filter(e =>
+                (e.course && e.course.id === courseFilter) ||
+                (e.courseId === courseFilter)
+            );
         }
 
         if (dateFilter !== 'all') {
             const now = new Date();
             filtered = filtered.filter(e => {
+                if (!e.enrollDate) return false;
                 const enrollDate = new Date(e.enrollDate);
                 switch(dateFilter) {
                     case 'today':
@@ -476,10 +553,10 @@
 
         if (searchTerm) {
             filtered = filtered.filter(e =>
-                e.courseTitle.toLowerCase().includes(searchTerm) ||
-                e.studentName.toLowerCase().includes(searchTerm) ||
-                e.enrollmentId.toLowerCase().includes(searchTerm)
-            );
+                (e.courseTitle && e.courseTitle.toLowerCase().includes(searchTerm)) ||
+                (e.studentName && e.studentName.toLowerCase().includes(searchTerm)) ||
+                (e.enrollmentId && e.enrollmentId.toLowerCase().includes(searchTerm)) ||
+                (e.course && e.course.title && e.course.title.toLowerCase().includes(searchTerm)));
         }
 
         return filtered;
@@ -504,14 +581,11 @@
     function updatePagination() {
         const filtered = getFilteredEnrollments();
         const totalPages = Math.ceil(filtered.length / itemsPerPage);
-        document.querySelector('.pagination span').textContent = `Page ${currentPage} of ${totalPages}`;
-    }
+        $(".pagination span").text(`Page ${currentPage} of ${totalPages}`);
 
-    function showError(message) {
-        const tableBody = document.getElementById('enrollmentTableBody');
-        tableBody.innerHTML = `<tr><td colspan="5" class="error">${message}</td></tr>`;
+        $(".prev-btn").prop("disabled", currentPage === 1);
+        $(".next-btn").prop("disabled", currentPage === totalPages || totalPages === 0);
     }
 </script>
-
 </body>
 </html>

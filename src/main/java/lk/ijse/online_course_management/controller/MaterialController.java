@@ -2,6 +2,7 @@ package lk.ijse.online_course_management.controller;
 
 import lk.ijse.online_course_management.dto.MaterialDTO;
 import lk.ijse.online_course_management.dto.ResponseDTO;
+import lk.ijse.online_course_management.service.EnrollmentService;
 import lk.ijse.online_course_management.service.MaterialService;
 import lk.ijse.online_course_management.util.VarList;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ public class MaterialController {
     private static final Logger log = LoggerFactory.getLogger(MaterialController.class);
 
     private final MaterialService materialService;
+    private final EnrollmentService enrollmentService;
 
     public static String uploadDirectory = System.getProperty("user.dir") + "/FrontEnd/webApp/videos";
 
@@ -41,8 +43,10 @@ public class MaterialController {
     );
 
     @Autowired
-    public MaterialController(MaterialService materialService) {
+    public MaterialController(MaterialService materialService, EnrollmentService enrollmentService) {
         this.materialService = materialService;
+        this.enrollmentService = enrollmentService;
+
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -112,16 +116,26 @@ public class MaterialController {
     }
 
     @GetMapping("/course/{courseId}")
-    public ResponseEntity<ResponseDTO> getMaterialsByCourse(@PathVariable UUID courseId) {
+    public ResponseEntity<ResponseDTO> getMaterialsByCourse(
+            @PathVariable UUID courseId,
+            @RequestHeader("Authorization") String authHeader) {
         try {
+            String token = authHeader.replace("Bearer ", "");
+
+            if (!enrollmentService.isUserEnrolled(token, courseId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(new ResponseDTO(VarList.Forbidden, "Not enrolled in this course", null));
+            }
             List<MaterialDTO> materials = materialService.getAllMaterialsByCourse(courseId);
-            return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Success", materials));
+            return ResponseEntity.ok(new ResponseDTO(VarList.Retrieved, "Success", materials));
+
         } catch (Exception e) {
             log.error("Error loading materials for course {}: {}", courseId, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(VarList.Internal_Server_Error, "Error: " + e.getMessage(), null));
+                    .body(new ResponseDTO(VarList.Internal_Server_Error, "Error loading materials", null));
         }
     }
+
 
     @GetMapping("/{materialId}")
     public ResponseEntity<ResponseDTO> getMaterialById(@PathVariable UUID materialId) {

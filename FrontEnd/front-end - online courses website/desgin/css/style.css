@@ -454,15 +454,15 @@ section{
 }
 
 .side-bar .profile .image{
-   height: 10rem;
-   width: 10rem;
+   height: 8rem;
+   width: 8rem;
    border-radius: 50%;
    object-fit: contain;
    margin-bottom: 1rem;
 }
 
 .side-bar .profile .name{
-   font-size: 2rem;
+   font-size: 1.8rem;
    color:var(--black);
    overflow: hidden;
    text-overflow: ellipsis;
@@ -476,12 +476,12 @@ section{
 
 .side-bar .navbar a{
    display: block;
-   padding: 1.6rem 1rem;
-   font-size: 1.7rem;
+   padding: 1.3rem 1rem;
+   font-size: 1.6rem;
 }
 
 .side-bar .navbar a i{
-   margin-right: 3rem;
+   margin-right: 4rem;
    color:var(--main-color);
    transition: .2s linear;
 }
@@ -500,6 +500,12 @@ section{
 
 .side-bar.active{
    left: -30rem;
+}
+.logout-btn{
+   color: white;
+   font-weight: bold;
+   font-size: larger;
+
 }
 
 .home-grid .box-container{

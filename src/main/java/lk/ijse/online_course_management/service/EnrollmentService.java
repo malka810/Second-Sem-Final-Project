@@ -8,9 +8,28 @@ import java.util.UUID;
 
 public interface EnrollmentService {
 
-    int saveEnroll(EnrollmentDTO enrollmentDTO);
+    String saveEnroll(EnrollmentDTO enrollmentDTO);
 
     List<EnrollmentDTO> getAllEnrollments();
 
     void deleteEnrollment(UUID enrollmentId);
+
+    List<EnrollmentDTO> getEnrollmentsByStudent(UUID studentId);
+
+    UUID getStudentIdByEmail(String email);
+
+
+    boolean isUserEnrolled(String token, UUID courseId);
+
+    List<EnrollmentDTO> getEnrollmentsWithProgress(UUID studentId);
+
+    boolean verifyEnrollmentOwnership(UUID enrollmentId, UUID studentId);
+
+    EnrollmentDTO updateCourseProgress(EnrollmentDTO enrollmentDTO);
+
+    List<EnrollmentDTO> getEnrollmentsByCourse(UUID courseId);
+
+    boolean isUserEnrolled(UUID studentId, UUID courseId);
+
+    EnrollmentDTO createEnrollment(EnrollmentDTO enrollmentDTO);
 }

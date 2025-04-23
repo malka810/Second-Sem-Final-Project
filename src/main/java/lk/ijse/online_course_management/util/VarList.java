@@ -58,4 +58,7 @@ public class VarList {
     public static final int RSP_ERROR = 500;
     public static final int RSP_DUPLICATED = 409;
     public static int Success = 200;
+    public static int Retrieved = 200;
+    public static int Updated;
+    public static int Deleted;
 }

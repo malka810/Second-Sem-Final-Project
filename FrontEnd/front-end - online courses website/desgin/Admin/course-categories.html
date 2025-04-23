@@ -2,9 +2,589 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Courses | EduNexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .footer {
+            margin-top: 35rem;
+
+        }
+        /* Remove these styles */
+        .enroll-btn.enrolled {
+            background: #28a745;
+            cursor: default;
+        }
+
+        /* Course Grid Styles */
+        .courses-container {
+            padding: 2rem 3rem;
+        }
+
+        .courses-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1.6rem;
+        }
+
+        .filter-select {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ddd;
+            background: white;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 1rem 2rem rgba(0,0,0,0.15);
+        }
+
+        .course-thumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-title {
+            font-size: 1.8rem;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .course-instructor {
+            color: var(--light-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .course-description {
+            color: var(--light-black);
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 6.3rem;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .course-duration {
+            font-size: 1.2rem;
+            color: var(--light-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .enroll-btn {
+            background: var(--main-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1.4rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .enroll-btn:hover {
+            background: var(--purple);
+        }
+
+        .enroll-btn.enrolled {
+            background: #28a745;
+            cursor: default;
+        }
+
+        .enroll-btn i {
+            font-size: 1.2rem;
+        }
+
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 4rem;
+            color: var(--light-black);
+            font-size: 1.6rem;
+        }
+
+        .error-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 4rem;
+            color: var(--red);
+            font-size: 1.6rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.7rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .badge-primary {
+            background: rgba(155, 46, 213, 0.1);
+            color: var(--main-color);
+        }
+
+        .badge-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        @media (max-width: 768px) {
+            .course-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .search-filter {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
 
+<header class="header">
+    <section class="flex">
+        <a href="studentHome.html" class="logo">
+            <img src="../images/logo.png" class="image" alt="">
+            <b id="logoN" style="color: #9b2ed5">EduNexus</b>
+        </a>
+        <form class="search-form" id="searchForm">
+            <input type="text" id="globalSearch" required placeholder="Search courses..." maxlength="100">
+            <button type="submit" class="fas fa-search"></button>
+        </form>
+        <div class="icons">
+            <div id="menu-btn" class="fas fa-bars"></div>
+            <div id="search-btn" class="fas fa-search"></div>
+            <div id="user-btn" class="fas fa-user"></div>
+            <div id="toggle-btn" class="fas fa-sun"></div>
+        </div>
+        <div class="profile">
+            <img src="../images/User.png" width="80" height="80" class="image" alt="">
+            <p class="role">Student</p>
+            <a href="profile.html" class="btn">view profile</a>
+            <div class="flex-btn">
+                <a href="../logout.html" class="option-btn">logout</a>
+            </div>
+        </div>
+    </section>
+</header>
+
+<div class="side-bar">
+    <div id="close-btn">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="profile">
+        <img src="../images/User.png" class="image" alt="">
+        <p class="role">Student</p>
+        <a href="profile.html" class="btn">view profile</a>
+    </div>
+    <nav class="navbar">
+        <a href="../admin-dashboard.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
+        <a href="course-manage.html" class="active"><i class="fas fa-book"></i><span>Course Management</span></a>
+        <a href="course-categories.html"><i class="fas fa-tags"></i><span>Course Categories</span></a>
+        <a href="../index.html" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="logout-text">Logout</span>
+        </a>
+    </nav>
+</div>
+
+<section class="courses-container">
+    <div class="courses-header">
+        <h1 class="heading">Available Courses</h1>
+    </div>
+
+    <div class="search-filter">
+        <input type="text" id="courseSearch" class="search-box" placeholder="Search by course name, instructor...">
+        <select id="categoryFilter" class="filter-select">
+            <option value="all">All Categories</option>
+            <option value="web">Web Development</option>
+            <option value="data">Data Science</option>
+            <option value="design">Design</option>
+        </select>
+        <select id="difficultyFilter" class="filter-select">
+            <option value="all">All Levels</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select>
+    </div>
+
+    <div class="course-grid" id="courseContainer">
+        <div class="empty-state">
+            <i class="fas fa-spinner fa-spin"></i> Loading courses...
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    &copy; copyright @ 2025 by <span>EduNexus</span> | all rights reserved!
+</footer>
+
+<script src="../js/script.js"></script>
+<script>
+    const VarList = {
+        Created: "201",
+        Bad_Request: "400",
+        Not_Found: "404",
+        Conflict: "409",
+        Not_Acceptable: "406",
+        Internal_Server_Error: "500"
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadAvailableCourses();
+
+        document.getElementById('courseSearch').addEventListener('input', filterCourses);
+        document.getElementById('categoryFilter').addEventListener('change', filterCourses);
+        document.getElementById('difficultyFilter').addEventListener('change', filterCourses);
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            filterCourses();
+        });
+    });
+
+    let allCourses = [];
+
+    function loadAvailableCourses() {
+        fetch('http://localhost:3030/api/v1/courses/active', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error("HTTP error", response.status, response.statusText);
+                    return response.text().then(text => { throw new Error(text) });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("API Response:", data);
+                if (data.data && Array.isArray(data.data)) {
+                    allCourses = data.data;
+                    displayCourses(allCourses);
+                } else if (Array.isArray(data)) {
+                    allCourses = data;
+                    displayCourses(allCourses);
+                } else {
+                    throw new Error("Unexpected data format from API");
+                }
+            })
+            .catch(error => {
+                console.error("Error loading courses:", error);
+                document.getElementById('courseContainer').innerHTML = `
+            <div class="error-state">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Error loading courses</p>
+                <p>${error.message}</p>
+            </div>`;
+            });
+    }
+
+    function displayCourses(courses) {
+        const container = document.getElementById('courseContainer');
+        container.innerHTML = '';
+
+        if (!courses || courses.length === 0) {
+            container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-book-open"></i>
+                No courses available at the moment
+            </div>`;
+            return;
+        }
+
+        courses.forEach(course => {
+            const card = createCourseCard(course);
+            container.appendChild(card);
+        });
+    }
+    function createCourseCard(course) {
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        let instructorName = 'Unknown Instructor';
+        if (course.instructor && course.instructor.fullName) {
+            instructorName = course.instructor.fullName;
+        } else if (course.instructorName) {
+            instructorName = course.instructorName;
+        }
+        const thumbnail = course.imageUrl || '../images/default-course.jpg';
+        const isEnrolled = course.enrollmentStatus === 'ENROLLED' || course.isEnrolled;
+
+        card.innerHTML = `
+        <img src="${thumbnail}" alt="${course.title}" class="course-thumbnail">
+        <div class="course-content">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="course-title">${course.title || 'Untitled Course'}</h3>
+                ${course.isNew ? '<span class="badge badge-primary">NEW</span>' : ''}
+            </div>
+            <p class="course-instructor">By ${instructorName}</p>
+            <p class="course-description">${course.description || 'No description available'}</p>
+            <div class="course-meta">
+                <span class="course-duration">
+                    <i class="far fa-clock"></i> ${course.duration || 'Self-paced'}
+                    ${course.level ? `<span class="badge badge-success">${course.level}</span>` : ''}
+                </span>
+                ${isEnrolled ? '' : `
+                    <button class="enroll-btn" data-id="${course.courseId}">
+                        <i class="fas fa-plus"></i> Enroll
+                    </button>
+                `}
+            </div>
+        </div>
+    `;
+
+        if (!isEnrolled) {
+            card.querySelector('.enroll-btn').addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent card click event
+                enrollInCourse(this.dataset.id);
+            });
+        }
+
+        card.addEventListener('click', function(e) {
+            if (!e.target.closest('.enroll-btn')) {
+                window.location.href = `course-details.html?id=${course.courseId}`;
+            }
+        });
+
+        return card;
+    }
+    // function createCourseCard(course) {
+    //    const card = document.createElement('div');
+    //    card.className = 'course-card';
+    //    let instructorName = 'Unknown Instructor';
+    //    if (course.instructor && course.instructor.fullName) {
+    //       instructorName = course.instructor.fullName;
+    //    } else if (course.instructorName) {
+    //       instructorName = course.instructorName;
+    //    }
+    //    const thumbnail = course.imageUrl || '../images/default-course.jpg';
+    //    const isEnrolled = course.enrollmentStatus === 'ENROLLED';
+    //
+    //    card.innerHTML = `
+    //          <img src="${thumbnail}" alt="${course.title}" class="course-thumbnail">
+    //          <div class="course-content">
+    //              <div style="display: flex; justify-content: space-between; align-items: center;">
+    //                  <h3 class="course-title">${course.title || 'Untitled Course'}</h3>
+    //                  ${course.isNew ? '<span class="badge badge-primary">NEW</span>' : ''}
+    //              </div>
+    //              <p class="course-instructor">By ${instructorName}</p>
+    //              <p class="course-description">${course.description || 'No description available'}</p>
+    //              <div class="course-meta">
+    //                  <span class="course-duration">
+    //                      <i class="far fa-clock"></i> ${course.duration || 'Self-paced'}
+    //                      ${course.level ? `<span class="badge badge-success">${course.level}</span>` : ''}
+    //                  </span>
+    //                  <button class="enroll-btn ${isEnrolled ? 'enrolled' : ''}"
+    //                          data-id="${course.courseId}"
+    //                          ${isEnrolled ? 'disabled' : ''}>
+    //                      <i class="fas ${isEnrolled ? 'fa-check' : 'fa-plus'}"></i>
+    //                      ${isEnrolled ? 'Enrolled' : 'Enroll'}
+    //                  </button>
+    //              </div>
+    //          </div>
+    //      `;
+    //
+    //    if (!isEnrolled) {
+    //       card.querySelector('.enroll-btn').addEventListener('click', function() {
+    //          enrollInCourse(this.dataset.id);
+    //       });
+    //    }
+    //    card.addEventListener('click', function(e) {
+    //       if (!e.target.closest('.enroll-btn')) {
+    //          window.location.href = `course-details.html?id=${course.courseId}`;
+    //       }
+    //    });
+    //    return card;
+    // }
+
+    // function enrollInCourse(courseId) {
+    //    if (!confirm('Are you sure you want to enroll in this course?')) {
+    //       return;
+    //    }
+    //
+    //    const button = document.querySelector(`.enroll-btn[data-id="${courseId}"]`);
+    //    const originalText = button.innerHTML;
+    //    button.disabled = true;
+    //    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enrolling...';
+    //
+    //    const authToken = localStorage.getItem('authToken');
+    //    const enrollmentData = {
+    //       courseId: courseId
+    //    };
+    //
+    //    fetch(`http://localhost:3030/api/v1/enrollments/enroll`, {
+    //       method: 'POST',
+    //       headers: {
+    //          'Content-Type': 'application/json',
+    //          'Authorization': 'Bearer ' + authToken
+    //       },
+    //       body: JSON.stringify(enrollmentData)
+    //    })
+    //            .then(async response => {
+    //               const data = await response.json();
+    //               if (!response.ok) {
+    //                  throw new Error(data.message || 'Enrollment failed');
+    //               }
+    //               return data;
+    //            })
+    //            .then(data => {
+    //               // Check for success (201 Created)
+    //               if (data.code === 201 || data.code === "201") {
+    //                  button.innerHTML = '<i class="fas fa-check"></i> Enrolled';
+    //                  button.classList.add('enrolled');
+    //                  showSuccessToast('Enrollment successful!');
+    //
+    //                  window.location.href = `studentViewVideo.html?courseId=${courseId}`;
+    //               } else {
+    //                  throw new Error(data.message || 'Enrollment failed');
+    //               }
+    //            })
+    //            .catch(error => {
+    //               console.error('Enrollment error:', error);
+    //               button.innerHTML = originalText;
+    //               button.disabled = false;
+    //               showErrorToast(error.message || 'Failed to enroll. Please try again.');
+    //            });
+    // }
+
+    function enrollInCourse(courseId) {
+        if (!confirm('Are you sure you want to enroll in this course?')) {
+            return;
+        }
+
+        const button = document.querySelector(`.enroll-btn[data-id="${courseId}"]`);
+        const originalText = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enrolling...';
+
+        const authToken = localStorage.getItem('authToken');
+        const enrollmentData = {
+            courseId: courseId
+        };
+
+        fetch(`http://localhost:3030/api/v1/enrollments/enroll`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + authToken
+            },
+            body: JSON.stringify(enrollmentData)
+        })
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Enrollment failed');
+                }
+                return data;
+            })
+            .then(data => {
+                if (data.code === 201 || data.code === "201") {
+                    showSuccessToast('Enrollment successful!');
+                    const card = document.querySelector(`.enroll-btn[data-id="${courseId}"]`).closest('.course-card');
+                    if (card) {
+                        card.querySelector('.enroll-btn').remove(); // Remove the enroll button
+                    }
+                    window.location.href = `studentViewVideo.html?courseId=${courseId}`;
+                } else {
+                    throw new Error(data.message || 'Enrollment failed');
+                }
+            })
+            .catch(error => {
+                console.error('Enrollment error:', error);
+                button.innerHTML = originalText;
+                button.disabled = false;
+                showErrorToast(error.message || 'Failed to enroll. Please try again.');
+            });
+    }
+
+    function showSuccessToast(message) {
+        alert('Success: ' + message);
+    }
+
+    function showErrorToast(message) {
+        alert('Error: ' + message);
+    }
+
+    function filterCourses() {
+        const searchTerm = document.getElementById('courseSearch').value.toLowerCase();
+        const category = document.getElementById('categoryFilter').value;
+        const difficulty = document.getElementById('difficultyFilter').value;
+
+        const filtered = allCourses.filter(course => {
+            const matchesSearch =
+
+                course.title.toLowerCase().includes(searchTerm) ||
+                (course.description && course.description.toLowerCase().includes(searchTerm)) ||
+                (course.instructor && course.instructor.fullName &&
+                    course.instructor.fullName.toLowerCase().includes(searchTerm));
+            const matchesCategory =
+                category === 'all' ||
+                (course.category && course.category.toLowerCase() === category);
+            const matchesDifficulty =
+                difficulty === 'all' ||
+                (course.level && course.level.toLowerCase() === difficulty);
+
+            return matchesSearch && matchesCategory && matchesDifficulty && course.active;
+        });
+
+        displayCourses(filtered);
+    }
+</script>
 </body>
 </html>

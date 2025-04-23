@@ -22,17 +22,22 @@ public class Enrollment {
     private User student;
     private String studentName;
     private Date enrollDate;
+    private int progress;
+    private Date lastAccessed;
+
 
     public Enrollment() {
     }
 
-    public Enrollment(UUID enrollmentId, Course course, String courseTitle, User student, String studentName, Date enrollDate) {
+    public Enrollment(UUID enrollmentId, Course course, String courseTitle, User student, String studentName, Date enrollDate, int progress, Date lastAccessed) {
         this.enrollmentId = enrollmentId;
         this.course = course;
         this.courseTitle = courseTitle;
         this.student = student;
         this.studentName = studentName;
         this.enrollDate = enrollDate;
+        this.progress = progress;
+        this.lastAccessed = lastAccessed;
     }
 
     public UUID getEnrollmentId() {
@@ -83,6 +88,17 @@ public class Enrollment {
         this.enrollDate = enrollDate;
     }
 
+    public int getProgress() {
+        return progress;
+    }
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+    public Date getLastAccessed() {
+        return lastAccessed;
+    }
+    public void setLastAccessed(Date lastAccessed) {}
+
     @Override
     public String toString() {
         return "Enrollment{" +
@@ -92,6 +108,8 @@ public class Enrollment {
                 ", student=" + student +
                 ", studentName='" + studentName + '\'' +
                 ", enrollDate=" + enrollDate +
+                ", progress=" + progress +
+                ", lastAccessed=" + lastAccessed +
                 '}';
     }
 }

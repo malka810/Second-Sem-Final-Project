@@ -125,4 +125,6 @@ public class CourseController {
                     .body(new ResponseDTO(VarList.RSP_ERROR, "Error retrieving active courses", null));
         }
     }
+
+
 }

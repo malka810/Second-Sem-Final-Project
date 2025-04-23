@@ -12,6 +12,11 @@
          margin-top: 35rem;
 
       }
+      /* Remove these styles */
+      .enroll-btn.enrolled {
+         background: #28a745;
+         cursor: default;
+      }
 
       /* Course Grid Styles */
       .courses-container {
@@ -230,6 +235,7 @@
    <nav class="navbar">
       <a href="../studentHome.html"><i class="fas fa-home"></i><span>Dashboard</span></a>
       <a href="courses.html" class="active"><i class="fas fa-book-open"></i><span>Courses</span></a>
+      <a href="myCourse.html"><i class="fas fa-book-open"></i><span>My Courses</span></a>
       <a href="AssignmentStudentView.html"><i class="fas fa-tasks"></i><span>Assignments</span></a>
       <a href="quizList.html"><i class="fas fa-question-circle"></i><span>Quizzes</span></a>
       <a href="gradeview.html"><i class="fas fa-star"></i><span>Grades</span></a>
@@ -276,6 +282,15 @@
 
 <script src="../js/script.js"></script>
 <script>
+   const VarList = {
+      Created: "201",
+      Bad_Request: "400",
+      Not_Found: "404",
+      Conflict: "409",
+      Not_Acceptable: "406",
+      Internal_Server_Error: "500"
+   };
+
    document.addEventListener('DOMContentLoaded', function() {
        loadAvailableCourses();
 
@@ -354,44 +369,144 @@
          instructorName = course.instructorName;
       }
       const thumbnail = course.imageUrl || '../images/default-course.jpg';
-      const isEnrolled = course.enrollmentStatus === 'ENROLLED';
+      const isEnrolled = course.enrollmentStatus === 'ENROLLED' || course.isEnrolled;
 
       card.innerHTML = `
-            <img src="${thumbnail}" alt="${course.title}" class="course-thumbnail">
-            <div class="course-content">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h3 class="course-title">${course.title || 'Untitled Course'}</h3>
-                    ${course.isNew ? '<span class="badge badge-primary">NEW</span>' : ''}
-                </div>
-                <p class="course-instructor">By ${instructorName}</p>
-                <p class="course-description">${course.description || 'No description available'}</p>
-                <div class="course-meta">
-                    <span class="course-duration">
-                        <i class="far fa-clock"></i> ${course.duration || 'Self-paced'}
-                        ${course.level ? `<span class="badge badge-success">${course.level}</span>` : ''}
-                    </span>
-                    <button class="enroll-btn ${isEnrolled ? 'enrolled' : ''}"
-                            data-id="${course.courseId}"
-                            ${isEnrolled ? 'disabled' : ''}>
-                        <i class="fas ${isEnrolled ? 'fa-check' : 'fa-plus'}"></i>
-                        ${isEnrolled ? 'Enrolled' : 'Enroll'}
-                    </button>
-                </div>
+        <img src="${thumbnail}" alt="${course.title}" class="course-thumbnail">
+        <div class="course-content">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="course-title">${course.title || 'Untitled Course'}</h3>
+                ${course.isNew ? '<span class="badge badge-primary">NEW</span>' : ''}
             </div>
-        `;
+            <p class="course-instructor">By ${instructorName}</p>
+            <p class="course-description">${course.description || 'No description available'}</p>
+            <div class="course-meta">
+                <span class="course-duration">
+                    <i class="far fa-clock"></i> ${course.duration || 'Self-paced'}
+                    ${course.level ? `<span class="badge badge-success">${course.level}</span>` : ''}
+                </span>
+                ${isEnrolled ? '' : `
+                    <button class="enroll-btn" data-id="${course.courseId}">
+                        <i class="fas fa-plus"></i> Enroll
+                    </button>
+                `}
+            </div>
+        </div>
+    `;
 
       if (!isEnrolled) {
-         card.querySelector('.enroll-btn').addEventListener('click', function() {
+         card.querySelector('.enroll-btn').addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent card click event
             enrollInCourse(this.dataset.id);
          });
       }
+
       card.addEventListener('click', function(e) {
          if (!e.target.closest('.enroll-btn')) {
             window.location.href = `course-details.html?id=${course.courseId}`;
          }
       });
+
       return card;
    }
+   // function createCourseCard(course) {
+   //    const card = document.createElement('div');
+   //    card.className = 'course-card';
+   //    let instructorName = 'Unknown Instructor';
+   //    if (course.instructor && course.instructor.fullName) {
+   //       instructorName = course.instructor.fullName;
+   //    } else if (course.instructorName) {
+   //       instructorName = course.instructorName;
+   //    }
+   //    const thumbnail = course.imageUrl || '../images/default-course.jpg';
+   //    const isEnrolled = course.enrollmentStatus === 'ENROLLED';
+   //
+   //    card.innerHTML = `
+   //          <img src="${thumbnail}" alt="${course.title}" class="course-thumbnail">
+   //          <div class="course-content">
+   //              <div style="display: flex; justify-content: space-between; align-items: center;">
+   //                  <h3 class="course-title">${course.title || 'Untitled Course'}</h3>
+   //                  ${course.isNew ? '<span class="badge badge-primary">NEW</span>' : ''}
+   //              </div>
+   //              <p class="course-instructor">By ${instructorName}</p>
+   //              <p class="course-description">${course.description || 'No description available'}</p>
+   //              <div class="course-meta">
+   //                  <span class="course-duration">
+   //                      <i class="far fa-clock"></i> ${course.duration || 'Self-paced'}
+   //                      ${course.level ? `<span class="badge badge-success">${course.level}</span>` : ''}
+   //                  </span>
+   //                  <button class="enroll-btn ${isEnrolled ? 'enrolled' : ''}"
+   //                          data-id="${course.courseId}"
+   //                          ${isEnrolled ? 'disabled' : ''}>
+   //                      <i class="fas ${isEnrolled ? 'fa-check' : 'fa-plus'}"></i>
+   //                      ${isEnrolled ? 'Enrolled' : 'Enroll'}
+   //                  </button>
+   //              </div>
+   //          </div>
+   //      `;
+   //
+   //    if (!isEnrolled) {
+   //       card.querySelector('.enroll-btn').addEventListener('click', function() {
+   //          enrollInCourse(this.dataset.id);
+   //       });
+   //    }
+   //    card.addEventListener('click', function(e) {
+   //       if (!e.target.closest('.enroll-btn')) {
+   //          window.location.href = `course-details.html?id=${course.courseId}`;
+   //       }
+   //    });
+   //    return card;
+   // }
+
+   // function enrollInCourse(courseId) {
+   //    if (!confirm('Are you sure you want to enroll in this course?')) {
+   //       return;
+   //    }
+   //
+   //    const button = document.querySelector(`.enroll-btn[data-id="${courseId}"]`);
+   //    const originalText = button.innerHTML;
+   //    button.disabled = true;
+   //    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enrolling...';
+   //
+   //    const authToken = localStorage.getItem('authToken');
+   //    const enrollmentData = {
+   //       courseId: courseId
+   //    };
+   //
+   //    fetch(`http://localhost:3030/api/v1/enrollments/enroll`, {
+   //       method: 'POST',
+   //       headers: {
+   //          'Content-Type': 'application/json',
+   //          'Authorization': 'Bearer ' + authToken
+   //       },
+   //       body: JSON.stringify(enrollmentData)
+   //    })
+   //            .then(async response => {
+   //               const data = await response.json();
+   //               if (!response.ok) {
+   //                  throw new Error(data.message || 'Enrollment failed');
+   //               }
+   //               return data;
+   //            })
+   //            .then(data => {
+   //               // Check for success (201 Created)
+   //               if (data.code === 201 || data.code === "201") {
+   //                  button.innerHTML = '<i class="fas fa-check"></i> Enrolled';
+   //                  button.classList.add('enrolled');
+   //                  showSuccessToast('Enrollment successful!');
+   //
+   //                  window.location.href = `studentViewVideo.html?courseId=${courseId}`;
+   //               } else {
+   //                  throw new Error(data.message || 'Enrollment failed');
+   //               }
+   //            })
+   //            .catch(error => {
+   //               console.error('Enrollment error:', error);
+   //               button.innerHTML = originalText;
+   //               button.disabled = false;
+   //               showErrorToast(error.message || 'Failed to enroll. Please try again.');
+   //            });
+   // }
 
    function enrollInCourse(courseId) {
       if (!confirm('Are you sure you want to enroll in this course?')) {
@@ -403,13 +518,18 @@
       button.disabled = true;
       button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enrolling...';
 
-      fetch('http://localhost:3030/api/v1/enrollments/enroll', {
+      const authToken = localStorage.getItem('authToken');
+      const enrollmentData = {
+         courseId: courseId
+      };
+
+      fetch(`http://localhost:3030/api/v1/enrollments/enroll`, {
          method: 'POST',
          headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+            'Authorization': 'Bearer ' + authToken
          },
-         body: JSON.stringify({ courseId: courseId })
+         body: JSON.stringify(enrollmentData)
       })
               .then(async response => {
                  const data = await response.json();
@@ -419,13 +539,13 @@
                  return data;
               })
               .then(data => {
-                 if (data.code === VarList.Created) {
-                    button.innerHTML = '<i class="fas fa-check"></i> Enrolled';
-                    button.classList.add('enrolled');
+                 if (data.code === 201 || data.code === "201") {
                     showSuccessToast('Enrollment successful!');
-                    setTimeout(() => {
-                       window.location.href = `lectureVideoList.html?courseId=${courseId}`;
-                    }, 1500);
+                    const card = document.querySelector(`.enroll-btn[data-id="${courseId}"]`).closest('.course-card');
+                    if (card) {
+                       card.querySelector('.enroll-btn').remove(); // Remove the enroll button
+                    }
+                    window.location.href = `lectureVideoList.html?courseId=${courseId}`;
                  } else {
                     throw new Error(data.message || 'Enrollment failed');
                  }
@@ -453,6 +573,7 @@
 
       const filtered = allCourses.filter(course => {
          const matchesSearch =
+
                  course.title.toLowerCase().includes(searchTerm) ||
                  (course.description && course.description.toLowerCase().includes(searchTerm)) ||
                  (course.instructor && course.instructor.fullName &&
